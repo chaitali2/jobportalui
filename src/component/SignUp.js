@@ -41,12 +41,20 @@ class SignUp extends React.Component {
 
             // this.setState({fields:fields});
             axios.post("http://10.234.4.106:8080/registration/recruiterJobSeeker",this.state.fields).then(response => {
-                console.log(response)
+                console.log(response);
+                let errors = {};
+                if(response.data=="exist"){
+                    errors["userexist"] = "User already existed";
+                    this.setState({
+                        errors: errors
+                    });
+                }else{
+                    alert("Form submitted");
+                }
                 this.setState({posts:response.data})
             }).catch(error=>{
                 console.log(error )
             })
-            alert("Form submitted");
         }
 
     }
@@ -189,6 +197,9 @@ class SignUp extends React.Component {
                             <option value="Recruiter">Recruiter</option>
                         </select>
                         <input type="submit" className="button"  value="Register"/>
+                        <input type="hidden" name="userexist" value={this.state.errors.userexist}/>
+                        <div className="errorMsg">{this.state.errors.userexist}</div>
+
                     </form>
                 </div>
             </div>
