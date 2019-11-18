@@ -1,31 +1,65 @@
-import React from 'react';
-class Login extends React.Component {
+import React, {Component} from 'react';
+import {Link, Redirect} from 'react-router-dom'
+import axios from "axios";
 
+// import './Login.css';
+class Login extends Component {
     constructor() {
         super();
         this.state = {
-            fields: {},
-            errors: {}
-        }
-    };
-    render() {
-        return (
-            <div>
-                <div id="login">
-                <form method="post" name={"loginform"} >
-                    <label>User Name :</label>
-                    <input type="text" name="username" value={this.state.fields.username} onChange={this.handleChange} />
-                    <div className="errorMsg">{this.state.errors.username}</div>
+            username: '',
+            password: '',
+            redirectToReferrer: false
+        };
+        this.login = this.login.bind(this);
+        this.onChange = this.onChange.bind(this);
+    }
 
-                    <label>Password :</label>
-                    <input type="text" name="password" value={this.state.fields.password} onChange={this.handleChange}  />
-                    <div className="errorMsg">{this.state.errors.password}</div>
-                </form>
+
+    login() {
+        axios.post("http://10.234.4.106:8080/authentication/login", this.state).then(response => {
+            let responseJSON = JSON.stringify(response);
+            console.log("response==" + responseJSON);
+
+            if (response.data) {
+                sessionStorage.setItem('userData', JSON.stringify(response));
+                this.setState({redirectToReferrer: true});
+            }
+            // this.setState({posts: response.data})
+        }).catch(error => {
+            console.log(error)
+        })
+
+    }
+
+
+    onChange(e) {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+
+    render() {
+
+        const {username, password} = this.state
+
+        // alert(this.state.redirectToReferrer + "===" + sessionStorage.getItem('userData'));
+        if (this.state.redirectToReferrer || sessionStorage.getItem("userData")) {
+            return (<Redirect to={'/portal'}/>);
+        }
+        return (
+            <div className="row" id="Body">
+                <div className="medium-5 columns left">
+                    <h4>Login</h4>
+                    <label>Username</label>
+                    <input type="text" name="username" onChange={this.onChange}/>
+                    <label>Password</label>
+                    <input type="password" name="password" onChange={this.onChange}/>
+                    <input type="submit" value="Login" onClick={this.login}/>
+                    <Link activeStyle={{color: 'green'}} to={"/registration"}>Registrartion</Link>
                 </div>
             </div>
         );
     }
 }
 
-
-export default Login;
+export default Login

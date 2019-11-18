@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import {Link} from "react-router-dom";
+// import DatePicker from "react-datepicker";
+// import {onSignIn} from './Home';
 
 class SignUp extends React.Component {
     constructor() {
@@ -40,7 +43,7 @@ class SignUp extends React.Component {
             // fields["confpassword"] = "";
 
             // this.setState({fields:fields});
-            axios.post("http://10.234.4.106:8080/registration/recruiterJobSeeker",this.state.fields).then(response => {
+            axios.post("http://10.234.4.106:8080/registration/registerUserDetail",this.state.fields).then(response => {
                 console.log(response);
                 let errors = {};
                 if(response.data=="exist"){
@@ -50,6 +53,7 @@ class SignUp extends React.Component {
                     });
                 }else{
                     alert("Form submitted");
+                    // onSignIn();
                 }
                 this.setState({posts:response.data})
             }).catch(error=>{
@@ -166,6 +170,12 @@ class SignUp extends React.Component {
 
                         <label>DOB :</label>
                         <input type="text" name="dob" value={this.state.fields.dob} onChange={this.handleChange}   />
+                        {/*<DatePicker*/}
+                        {/*    selected={ this.state.startDate }*/}
+                        {/*    onChange={ this.handleChange }*/}
+                        {/*    name="startDate"*/}
+                        {/*    dateFormat="MM/DD/YYYY"*/}
+                        {/*/>*/}
                         <div className="errorMsg">{this.state.errors.dob}</div>
 
                         <label>City :</label>
@@ -201,6 +211,8 @@ class SignUp extends React.Component {
                         <div className="errorMsg">{this.state.errors.userexist}</div>
 
                     </form>
+                    <Link to={"/login"}>Login</Link>
+
                 </div>
             </div>
 
