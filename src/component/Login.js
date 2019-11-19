@@ -9,6 +9,7 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
+            userDetail:'',
             redirectToReferrer: false
         };
         this.login = this.login.bind(this);
@@ -17,16 +18,20 @@ class Login extends Component {
 
 
     login() {
-        axios.post("http://10.234.4.106:8080/authentication/login", this.state).then(response => {
-            let responseJSON = JSON.stringify(response);
-            console.log("response==" + responseJSON);
+        console.log(this.state.redirectToReferrer);
+        axios.post("http://10.234.4.106:8080/authentication/login", this.state)
+            .then(response => {
+                console.log(response.data);
 
-            if (response.data) {
-                sessionStorage.setItem('userData', JSON.stringify(response));
-                this.setState({redirectToReferrer: true});
-            }
-            // this.setState({posts: response.data})
-        }).catch(error => {
+                if (response.data.statusCode=='OK') {
+                    let userdata=response.data.body;
+                    sessionStorage.setItem('userData', JSON.stringify(userdata));
+                    sessionStorage.setItem('username', response.data.body.username);
+                    sessionStorage.setItem('token',response.data.body.token);
+                    sessionStorage.setItem('userType',response.data.body.typeOfUser);
+                    this.setState({redirectToReferrer: true});
+                }
+            }).catch(error => {
             console.log(error)
         })
 
@@ -42,13 +47,18 @@ class Login extends Component {
 
         const {username, password} = this.state
 
-        // alert(this.state.redirectToReferrer + "===" + sessionStorage.getItem('userData'));
-        if (this.state.redirectToReferrer || sessionStorage.getItem("userData")) {
-            return (<Redirect to={'/portal'}/>);
+        console.log(this.state.redirectToReferrer + "===" + sessionStorage.getItem('userData'));
+        console.log(this.state.username);
+        if (this.state.redirectToReferrer ) {
+            if (sessionStorage.getItem("userType") == 'J') {
+                return (<Redirect to={'/jobseeker'}/>);
+            }else  if (sessionStorage.getItem("userType") == 'R') {
+                return (<Redirect to={'/recruiter'}/>);
+            }
         }
         return (
-            <div className="row" id="Body">
-                <div className="medium-5 columns left">
+            <div id="main-registration-container">
+                <div id="login">
                     <h4>Login</h4>
                     <label>Username</label>
                     <input type="text" name="username" onChange={this.onChange}/>

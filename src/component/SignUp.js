@@ -31,22 +31,10 @@ class SignUp extends React.Component {
         console.log("===>"+this.state.fields.firstname)
         console.log("===>"+this.state.fields.typeOfUser)
         if (this.validateForm()) {
-            // let fields = {};
-            // fields["firstname"] = "";
-            // fields["lastname"] = "";
-            // fields["dob"] = "";
-            // fields["city"] = "";
-            // fields["state"] = "";
-            // fields["emailid"] = "";
-            // fields["user"] = "";
-            // fields["password"] = "";
-            // fields["confpassword"] = "";
-
-            // this.setState({fields:fields});
             axios.post("http://10.234.4.106:8080/registration/registerUserDetail",this.state.fields).then(response => {
                 console.log(response);
                 let errors = {};
-                if(response.data=="exist"){
+                if(response.data.body=="exist"){
                     errors["userexist"] = "User already existed";
                     this.setState({
                         errors: errors
@@ -203,8 +191,8 @@ class SignUp extends React.Component {
 
                         <label>Type of User :</label>
                         <select name="typeOfUser" value={this.state.fields.typeOfUser} onChange={this.handleChange}>
-                            <option value="JobSeeker">JobSeeker</option>
-                            <option value="Recruiter">Recruiter</option>
+                            <option value="J">JobSeeker</option>
+                            <option value="R">Recruiter</option>
                         </select>
                         <input type="submit" className="button"  value="Register"/>
                         <input type="hidden" name="userexist" value={this.state.errors.userexist}/>
