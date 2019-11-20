@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router";
+import RecruiterHeader from "./RecruiterHeader";
 
 class Recruiter extends React.Component {
 
@@ -9,14 +10,15 @@ class Recruiter extends React.Component {
             redirectToReferrer: false,
             username: sessionStorage.getItem("username"),
             token: sessionStorage.getItem("token"),
-            userType: sessionStorage.getItem("userType")
+            userType: sessionStorage.getItem("userType"),
+            id: sessionStorage.getItem("id")
         };
 
         // this.logout = this.logout().bind(this);
     }
 
     render() {
-        alert("output"+this.state.userType);
+        alert("output" + this.state.userType);
         if (this.state.redirectToReferrer) {
             return (<Redirect to={'/login'}/>);
         }
@@ -27,15 +29,7 @@ class Recruiter extends React.Component {
 
         return (
             <div>
-                <div className="header">
-                    <label className="label label-primary">JOB Portal</label>
-                    <label className="label label-primary">Add Job</label>
-                    <label className="label label-primary">Job List</label>
-                    <label className="label label-primary">Apply Job List</label>
-                    <label className="label label-primary">Profile</label>
-                    <label className="label label-primary">username</label>
-                    <label className="label label-primary" onClick={this.logout}>Logout</label>
-                </div>
+                <RecruiterHeader/>
             </div>
         );
     }

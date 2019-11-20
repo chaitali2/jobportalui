@@ -8,28 +8,28 @@
     color: #333333;
     font-size: 14px;
     background: #ffffff;
-    margin: 100px auto;
+    margin: 35px auto;
 }
 
-form label, form input, form select {
+label,input,select {
     display: block;
     margin-bottom: 10px;
     width: 90%
 }
 
-form input {
+input {
     padding: 10px;
     border: solid 1px #BDC7D8;
 }
 
-form select{
+select{
     padding: 10px;
     border: solid 1px #BDC7D8;
 
 }
 
 .button {
-    background-color: #00BFFF;
+    background-color: lightseagreen;
     border-color: #3ac162;
     font-weight: bold;
     padding: 12px 15px;
@@ -47,9 +47,9 @@ form select{
 }
 
 .header {
-    background: lightskyblue;
+    background: lightseagreen;
     height: 50px;
-    padding-top: 10px;
+    padding-top: 25px;
 }
 
 .label {
@@ -67,5 +67,9 @@ form select{
 }
 
 .label-primary {
-    background-color: #337ab7;
+    background-color: darkgray;
+}
+
+.alignlogin{
+float: right;
 }

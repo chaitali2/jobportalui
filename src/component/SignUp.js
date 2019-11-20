@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
+import HomeHeader from "./HomeHeader";
 // import DatePicker from "react-datepicker";
 // import {onSignIn} from './Home';
 
@@ -145,6 +146,8 @@ class SignUp extends React.Component {
     render() {
         return (
             <div id="main-registration-container">
+                <HomeHeader/>
+
                 <div id="register">
                     <h3>Registration page</h3>
                     <form method="post"  name="userRegistrationForm"  onSubmit= {this.submituserRegistrationForm} >
