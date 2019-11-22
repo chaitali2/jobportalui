@@ -30,11 +30,12 @@ class JobSeekerHeader extends React.Component {
         }
         return (
             <div>
+
                 <div className="header">
                     <label className="label label-primary">JOB Portal</label>
                     <label className="label label-primary"><Link to={"/jobReport"}>Job List</Link></label>
-                    <label className="label label-primary">Profile</label>
-                    <label className="label label-primary">username</label>
+                    <label className="label label-primary"><Link to={"/profile"}>Profile</Link></label>
+                    <label className="label label-primary">{this.state.username}</label>
                     <label className="label label-primary" onClick={this.logout}>Logout</label>
                 </div>
             </div>

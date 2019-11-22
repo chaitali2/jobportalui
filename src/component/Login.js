@@ -10,7 +10,7 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            userDetail:'',
+            userDetail: '',
             redirectToReferrer: false
         };
         this.login = this.login.bind(this);
@@ -24,14 +24,18 @@ class Login extends Component {
             .then(response => {
                 console.log(response);
 
-                if (response.data.statusCode=='OK') {
-                    let userdata=response.data.body;
-                    sessionStorage.setItem('userData', JSON.stringify(userdata));
-                    sessionStorage.setItem('username', response.data.body.username);
-                    sessionStorage.setItem('id', response.data.body.id);
-                    sessionStorage.setItem('token',response.data.body.token);
-                    sessionStorage.setItem('userType',response.data.body.typeOfUser);
-                    this.setState({redirectToReferrer: true});
+                if (response.data.statusCode == 'OK') {
+                    if (response.data.body.errorMessage) {
+                        alert(response.data.body.errorMessage);
+                    } else {
+                        let userdata = response.data.body;
+                        sessionStorage.setItem('userData', JSON.stringify(userdata));
+                        sessionStorage.setItem('username', response.data.body.username);
+                        sessionStorage.setItem('id', response.data.body.id);
+                        sessionStorage.setItem('token', response.data.body.token);
+                        sessionStorage.setItem('userType', response.data.body.typeOfUser);
+                        this.setState({redirectToReferrer: true});
+                    }
                 }
             }).catch(error => {
             console.log(error)
@@ -52,17 +56,17 @@ class Login extends Component {
         console.log(this.state.redirectToReferrer + "===" + sessionStorage.getItem('userData'));
         console.log(this.state.username);
         console.log(this.state.id);
-        if (this.state.redirectToReferrer ) {
+        if (this.state.redirectToReferrer) {
             if (sessionStorage.getItem("userType") == 'J') {
                 return (<Redirect to={'/jobseeker'}/>);
-            }else  if (sessionStorage.getItem("userType") == 'R') {
+            } else if (sessionStorage.getItem("userType") == 'R') {
                 return (<Redirect to={'/recruiter'}/>);
             }
         }
         return (
             <div id="main-registration-container">
-            <HomeHeader/>
-            <div id="login">
+                <HomeHeader/>
+                <div id="login">
                     <h4>Login</h4>
                     <label>Username</label>
                     <input type="text" name="username" onChange={this.onChange}/>

@@ -34,7 +34,6 @@ class PostJobs extends React.Component {
     savePostedJobDetail(){
 
         axios.post("http://10.234.4.106:8080/recruiter/post_jobs",this.state).then(response => {
-            console.log(response);
         }).catch(error=>{
             console.log("error=="+error);
         })
@@ -44,7 +43,6 @@ class PostJobs extends React.Component {
         var options = e.target.options;
         var value = [];
         let l = options.length;
-        console.log("length="+l);
         for (var i = 0; i < l; i++) {
             if (options[i].selected) {
                 value.push(options[i].value);

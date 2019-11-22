@@ -16,24 +16,6 @@ class JobPortalHome extends React.Component {
 
     componentWillMount() {
         if (sessionStorage.getItem("userData")) {
-            console.log("componentWillMount");
-            // this.setState({username: sessionStorage.getItem("username")});
-            // this.setState({token: sessionStorage.getItem("token")});
-
-            console.log("this.state==" + this.state);
-            // axios.post("http://10.234.4.106:8080/authentication/home?name=" + this.state.username + "&token=" + this.state.token, this.state)
-            // axios.post("http://10.234.4.106:8080/authentication/home", this.state)
-            //     .then(response => {
-            //         console.log("Status code==" + response.data.statusCode);
-            //
-            //         if (response.data.statusCode == 'OK') {
-            //             this.setState({error: false});
-            //
-            //             let userdata = response.data.body;
-            //         }
-            //     }).catch(error => {
-            //     console.log("error==" + error)
-            // })
         } else {
             this.setState({redirectToReferrer: true});
         }

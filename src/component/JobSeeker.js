@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router";
+import RecruiterHeader from "./RecruiterHeader";
 import JobSeekerHeader from "./JobSeekerHeader";
 
 class JobSeeker extends React.Component {
@@ -10,22 +11,14 @@ class JobSeeker extends React.Component {
             redirectToReferrer: false,
             username: sessionStorage.getItem("username"),
             token: sessionStorage.getItem("token"),
-            userType: sessionStorage.getItem("userType")
+            userType: sessionStorage.getItem("userType"),
+            id: sessionStorage.getItem("id")
         };
 
         // this.logout = this.logout().bind(this);
     }
 
-    componentWillMount() {
-        if (sessionStorage.getItem("userData")) {
-            console.log("in job seeker")
-        } else {
-            this.setState({redirectToReferrer: true});
-        }
-    }
-
     render() {
-        alert("output"+this.state.userType);
         if (this.state.redirectToReferrer) {
             return (<Redirect to={'/login'}/>);
         }
@@ -36,11 +29,17 @@ class JobSeeker extends React.Component {
 
         return (
             <div>
-           <JobSeekerHeader/>
+                <JobSeekerHeader/>
             </div>
         );
     }
 
+    componentWillMount() {
+        if (sessionStorage.getItem("userData")) {
+        } else {
+            this.setState({redirectToReferrer: true});
+        }
+    }
 
     logout() {
         sessionStorage.setItem("userData", "");

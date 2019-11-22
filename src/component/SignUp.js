@@ -29,24 +29,20 @@ class SignUp extends React.Component {
 
     submituserRegistrationForm(e) {
         e.preventDefault();
-        console.log("===>"+this.state.fields.firstname)
-        console.log("===>"+this.state.fields.typeOfUser)
         if (this.validateForm()) {
             axios.post("http://10.234.4.106:8080/registration/registerUserDetail",this.state.fields).then(response => {
-                console.log(response);
                 let errors = {};
-                if(response.data.body=="exist"){
-                    errors["userexist"] = "User already existed";
+                if(response.data.body.errorMessage){
+                    errors["userexist"] = response.data.body.errorMessage;
                     this.setState({
                         errors: errors
                     });
                 }else{
                     alert("Form submitted");
-                    // onSignIn();
                 }
                 this.setState({posts:response.data})
             }).catch(error=>{
-                console.log(error )
+                console.log(error)
             })
         }
 

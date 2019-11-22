@@ -17,8 +17,18 @@ const columns = [
     {key: "state", name: "State", editable: true},
     {key: "pincode", name: "Pincode", editable: true},
     {key: "job_opening_date", name: "Opening Date", editable: true},
-    {key: "description", name: "Description", editable: true}
+    {key: "description", name: "Description", editable: true},
+    {key: "apply", name: "Apply", editable: true}
 ]
+
+const firstNameActions = [
+    {
+        icon: <input type="button" className="button" value="Apply Job"/>,
+        callback: () => {
+            alert("Deleting");
+        }
+    }
+];
 
 class JobReport extends React.Component {
     constructor() {
@@ -37,10 +47,8 @@ class JobReport extends React.Component {
 
     componentWillMount() {
         let jobListURL = "";
-        alert(this.state.userType);
         if (this.state.userType == 'R') {
             axios.post("http://10.234.4.106:8080/recruiter/jobDetails", this.state.user_id).then(response => {
-                console.log(response);
                 this.setState({rows: response.data.body})
                 this.setState({rowslength: response.data.body.length})
             }).catch(error => {
@@ -62,7 +70,6 @@ class JobReport extends React.Component {
         if (this.state.userType = 'R') {
 
             axios.post("http://10.234.4.106:8080/recruiter/jobDetails", this.state.user_id).then(response => {
-                console.log(response);
                 this.setState({rows: response.data.body})
                 this.setState({rowslength: response.data.body.length})
             }).catch(error => {
@@ -71,7 +78,6 @@ class JobReport extends React.Component {
         } else {
 
             axios.post("http://10.234.4.106:8080/recruiter/jobDetails", '').then(response => {
-                console.log(response);
                 this.setState({rows: response.data.body})
                 this.setState({rowslength: response.data.body.length})
             }).catch(error => {
@@ -80,11 +86,18 @@ class JobReport extends React.Component {
         }
     }
 
+    getCellActions(column, row) {
+        const cellActions = {
+            apply: firstNameActions
+        };
+        return cellActions[column.key];
+    }
+
+
+
     render() {
         if (this.state.userType == 'R') {
-
             return (
-
                 <div>
                     <RecruiterHeader/>
                     <div className="maindiv">
@@ -115,7 +128,8 @@ class JobReport extends React.Component {
                                 rowsCount={this.state.rowslength}
                                 onGridRowsUpdated={this.onGridRowsUpdated}
                                 enableCellSelect={true}
-                                
+                                getCellActions={this.getCellActions}
+                                onCellSelected={this.onCellSelected}
                             />
                         </div>
                     </div>

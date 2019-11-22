@@ -9,12 +9,14 @@ import JobSeeker from "./component/JobSeeker";
 import Recruiter from "./component/Recruiter";
 import PostJobs from "./component/PostJobs";
 import JobReport from "./component/JobReport";
+import Profile from "./component/Profile";
 import { BrowserRouter as Router} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
 
 const App = () => (
     <Router>
         <div >
+            <Route path="/profile" component={Profile} />
             <Route path="/jobReport" component={JobReport} />
             <Route path="/postJobs" component={PostJobs} />
             <Route path="/home" component={Home} />

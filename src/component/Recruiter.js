@@ -18,7 +18,6 @@ class Recruiter extends React.Component {
     }
 
     render() {
-        alert("output" + this.state.userType);
         if (this.state.redirectToReferrer) {
             return (<Redirect to={'/login'}/>);
         }
@@ -36,9 +35,7 @@ class Recruiter extends React.Component {
 
     componentWillMount() {
         if (sessionStorage.getItem("userData")) {
-            console.log("in Recruiter")
         } else {
-            alert(1);
             this.setState({redirectToReferrer: true});
         }
     }
