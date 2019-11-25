@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from "axios";
 import ReactDataGrid from "react-data-grid";
 import RecruiterHeader from "./RecruiterHeader";
-import {Redirect} from "react-router";
+import ReactDOM from "react-dom";
 import JobSeekerHeader from "./JobSeekerHeader";
 
 const columns = [
@@ -18,17 +18,28 @@ const columns = [
     {key: "pincode", name: "Pincode", editable: true},
     {key: "job_opening_date", name: "Opening Date", editable: true},
     {key: "description", name: "Description", editable: true},
+    // {key: "skills", name: "Skills", editable: true},
     {key: "apply", name: "Apply", editable: true}
 ]
 
-const firstNameActions = [
-    {
-        icon: <input type="button" className="button" value="Apply Job"/>,
-        callback: () => {
-            alert("Deleting");
-        }
-    }
-];
+
+const columnsrecruiter = [
+    {key: "id", name: "JOB ID", editable: true},
+    {key: "company", name: "Company", editable: true},
+    {key: "category", name: "Category", editable: true},
+    {key: "job_type", name: "Type Of Job", editable: true},
+    {key: "experience", name: "Experience", editable: true},
+    {key: "salary_offer", name: "Salary", editable: true},
+    {key: "street_add", name: "Road no/Area", editable: true},
+    {key: "city", name: "City", editable: true},
+    {key: "state", name: "State", editable: true},
+    {key: "pincode", name: "Pincode", editable: true},
+    {key: "job_opening_date", name: "Opening Date", editable: true},
+    {key: "description", name: "Description", editable: true},
+    // {key: "skills", name: "Skills", editable: true},
+    {key: "update", name: "Update", editable: true},
+    {key: "delete", name: "Delete", editable: true}
+]
 
 class JobReport extends React.Component {
     constructor() {
@@ -40,24 +51,28 @@ class JobReport extends React.Component {
             userType: sessionStorage.getItem("userType"),
             user_id: sessionStorage.getItem("id"),
             rows: [],
-            rowslength: 0
+            rowslength: 0,
+            applyJob: false,
+            job_id: ''
         }
         this.generateReport = this.generateReport.bind(this);
+        this.getCellActions = this.getCellActions.bind(this);
     };
 
     componentWillMount() {
+
         let jobListURL = "";
         if (this.state.userType == 'R') {
             axios.post("http://10.234.4.106:8080/recruiter/jobDetails", this.state.user_id).then(response => {
+                console.log("response====>" + response);
                 this.setState({rows: response.data.body})
                 this.setState({rowslength: response.data.body.length})
             }).catch(error => {
                 console.log("error==" + error);
             })
         } else {
-
             axios.post("http://10.234.4.106:8080/recruiter/jobDetails", '').then(response => {
-                console.log(response);
+                console.log("response====>" + response);
                 this.setState({rows: response.data.body})
                 this.setState({rowslength: response.data.body.length})
             }).catch(error => {
@@ -86,16 +101,101 @@ class JobReport extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({applyJob: false});
+    }
+
     getCellActions(column, row) {
         const cellActions = {
-            apply: firstNameActions
+            apply: [{
+                icon: <input type="button" className="button" value="Apply Job"/>,
+                callback: () => {
+                    let jobid = row.id;
+                    this.setState({job_id: row.id});
+                    axios.post("http://10.234.4.106:8080/recruiter/jobdetailofcompany", row.id).then(response => {
+                        console.log("response==" + response);
+                        this.setState({jobdesc: response.data.body});
+                        this.setState({applyJob: true});
+                    }).catch(error => {
+                        console.log("error==" + error);
+                    })
+                }
+            }
+            ]
         };
         return cellActions[column.key];
     }
 
+    getCellActionOnupdate(column,row){
+        const cellActions = {
+            update: [{
+                icon: <input type="button" className="button" value="Update"/>,
+                callback: () => {
+                   alert("updated")
+                }
+            }
+            ],
+            delete:[{
+                icon: <input type="button" className="button" value="Delete"/>,
+                callback: () => {
+                    alert("removed")
 
+                    axios.post("http://10.234.4.106:8080/recruiter/removejobpost", row.id).then(response => {
+                        console.log("response==" + response);
+                    }).catch(error => {
+                        console.log("error==" + error);
+                    })
+                }
+            }]
+        };
+        return cellActions[column.key];
+    }
+
+    onChangeHandler = event => {
+        console.log(event.target.files[0])
+    }
 
     render() {
+        if (this.state.applyJob) {
+            return (
+                <div>
+                    <JobSeekerHeader/>
+                    <div id="main-registration-container">
+                        <div id="register">
+                            <h3>Job Detail</h3>
+
+                            <label> Company :</label>
+                            <label>{this.state.jobdesc.company}</label>
+
+                            <label> Category :</label>
+                            <label>{this.state.jobdesc.category}</label>
+
+                            <label> Experience :</label>
+                            <label>{this.state.jobdesc.experience}</label>
+
+                            <label> Offer Salary :</label>
+                            <label> {this.state.jobdesc.salary_offer}</label>
+
+                            <label> Skills :</label>
+                            <label>{this.state.jobdesc.skills.length}</label>
+
+                            <label> Address :</label>
+                            <label>{this.state.jobdesc.street_add} , {this.state.jobdesc.city} , {this.state.jobdesc.state} - {this.state.jobdesc.pincode}</label>
+
+                            <label> Description :</label>
+                            <label>{this.state.jobdesc.description}</label>
+
+                            <label> Resume :</label>
+                            <input type="file" name="file" onChange={this.onChangeHandler}/>
+
+                            <input type="button" className="button" value="Apply" />
+
+                        </div>
+                    </div>
+
+                </div>
+            );
+        }
         if (this.state.userType == 'R') {
             return (
                 <div>
@@ -104,17 +204,18 @@ class JobReport extends React.Component {
                         <input type="button" className="button" value="Report" onClick={this.generateReport}/>
                         <div>
                             <ReactDataGrid
-                                columns={columns}
+                                columns={columnsrecruiter}
                                 rowGetter={i => this.state.rows[i]}
                                 rowsCount={this.state.rowslength}
                                 onGridRowsUpdated={this.onGridRowsUpdated}
                                 enableCellSelect={true}
+                                getCellActions={this.getCellActionOnupdate}
                             />
                         </div>
                     </div>
                 </div>
             );
-        } else {
+        } else if (this.state.userType == 'J' && !this.state.applyJob) {
             return (
 
                 <div>

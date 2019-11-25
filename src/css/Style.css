@@ -40,6 +40,7 @@ select{
     font-weight: bold;
     padding: 6px 15px;
     color: #ffffff;
+    margin-right: 50px;
 }
 
 .errorMsg {
