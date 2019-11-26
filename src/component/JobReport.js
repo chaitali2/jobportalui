@@ -37,6 +37,7 @@ const columnsrecruiter = [
     {key: "job_opening_date", name: "Opening Date", editable: true},
     {key: "description", name: "Description", editable: true},
     // {key: "skills", name: "Skills", editable: true},
+    {key: "view", name: "View", editable: true},
     {key: "update", name: "Update", editable: true},
     {key: "delete", name: "Delete", editable: true}
 ]
@@ -53,10 +54,13 @@ class JobReport extends React.Component {
             rows: [],
             rowslength: 0,
             applyJob: false,
-            job_id: ''
+            job_id: '',
+            file:null
         }
         this.generateReport = this.generateReport.bind(this);
         this.getCellActions = this.getCellActions.bind(this);
+        this.applyForJob = this.applyForJob.bind(this);
+        this.onChangeHandler = this.onChangeHandler.bind(this);
     };
 
     componentWillMount() {
@@ -111,11 +115,12 @@ class JobReport extends React.Component {
                 icon: <input type="button" className="button" value="Apply Job"/>,
                 callback: () => {
                     let jobid = row.id;
-                    this.setState({job_id: row.id});
                     axios.post("http://10.234.4.106:8080/recruiter/jobdetailofcompany", row.id).then(response => {
                         console.log("response==" + response);
                         this.setState({jobdesc: response.data.body});
                         this.setState({applyJob: true});
+                        this.setState({job_id: response.data.body.id});
+
                     }).catch(error => {
                         console.log("error==" + error);
                     })
@@ -126,16 +131,28 @@ class JobReport extends React.Component {
         return cellActions[column.key];
     }
 
-    getCellActionOnupdate(column,row){
+    getCellActionOnupdate(column, row) {
         const cellActions = {
-            update: [{
+            view: [{
+                icon: <input type="button" className="button" value="View"/>,
+                callback: () => {
+                    alert("view")
+
+                    axios.post("http://10.234.4.106:8080/recruiter/appliedJobs", row.id).then(response => {
+                        console.log("response==" + response);
+                    }).catch(error => {
+                        console.log("error==" + error);
+                    })
+                }
+            }
+            ] ,update: [{
                 icon: <input type="button" className="button" value="Update"/>,
                 callback: () => {
-                   alert("updated")
+                    alert("updated")
                 }
             }
             ],
-            delete:[{
+            delete: [{
                 icon: <input type="button" className="button" value="Delete"/>,
                 callback: () => {
                     alert("removed")
@@ -152,7 +169,35 @@ class JobReport extends React.Component {
     }
 
     onChangeHandler = event => {
-        console.log(event.target.files[0])
+        console.log(event.target.files[0]);
+        this.setState({file:event.target.files[0]})
+    }
+
+    applyForJob() {
+        alert(document.getElementById("jobid").value);
+        alert(this.state.job_id);
+
+        var formData = new FormData();
+        // formData.append('file', this.state.file);
+        formData.append('job_id', this.state.job_id);
+        formData.append('user_id', this.state.user_id);
+
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        };
+
+        axios.post("http://10.234.4.106:8080/recruiter/applyforjob", this.state).then(response => {
+            console.log("response==" + response);
+            if(response.data.body.errorMessage){
+                alert(response.data.body.errorMessage);
+            }else{
+                alert(response.data.body);
+            }
+        }).catch(error => {
+            console.log("error==" + error);
+        })
     }
 
     render() {
@@ -163,7 +208,7 @@ class JobReport extends React.Component {
                     <div id="main-registration-container">
                         <div id="register">
                             <h3>Job Detail</h3>
-
+                            <input type="hidden" id="jobid" value={this.state.jobdesc.id}/>
                             <label> Company :</label>
                             <label>{this.state.jobdesc.company}</label>
 
@@ -186,9 +231,9 @@ class JobReport extends React.Component {
                             <label>{this.state.jobdesc.description}</label>
 
                             <label> Resume :</label>
-                            <input type="file" name="file" onChange={this.onChangeHandler}/>
+                            <input type="file" onChange={this.onChangeHandler}/>
 
-                            <input type="button" className="button" value="Apply" />
+                            <input type="button" className="button" value="Apply" onClick={this.applyForJob}/>
 
                         </div>
                     </div>
