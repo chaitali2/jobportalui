@@ -4,6 +4,7 @@ import ReactDataGrid from "react-data-grid";
 import RecruiterHeader from "./RecruiterHeader";
 import ReactDOM from "react-dom";
 import JobSeekerHeader from "./JobSeekerHeader";
+import {Redirect} from "react-router";
 
 const columns = [
     {key: "id", name: "JOB ID", editable: true},
@@ -55,10 +56,12 @@ class JobReport extends React.Component {
             rowslength: 0,
             applyJob: false,
             job_id: '',
-            file:null
+            file: null,
+            jobstatus: false
         }
         this.generateReport = this.generateReport.bind(this);
         this.getCellActions = this.getCellActions.bind(this);
+        this.getCellActionOnupdate = this.getCellActionOnupdate.bind(this);
         this.applyForJob = this.applyForJob.bind(this);
         this.onChangeHandler = this.onChangeHandler.bind(this);
     };
@@ -114,7 +117,6 @@ class JobReport extends React.Component {
             apply: [{
                 icon: <input type="button" className="button" value="Apply Job"/>,
                 callback: () => {
-                    let jobid = row.id;
                     axios.post("http://10.234.4.106:8080/recruiter/jobdetailofcompany", row.id).then(response => {
                         console.log("response==" + response);
                         this.setState({jobdesc: response.data.body});
@@ -137,15 +139,22 @@ class JobReport extends React.Component {
                 icon: <input type="button" className="button" value="View"/>,
                 callback: () => {
                     alert("view")
+                    window.localStorage.setItem("jobId", row.id);
+                    // this.props.history.push('/applyjoblist');
 
-                    axios.post("http://10.234.4.106:8080/recruiter/appliedJobs", row.id).then(response => {
-                        console.log("response==" + response);
-                    }).catch(error => {
-                        console.log("error==" + error);
-                    })
+                    this.setState({jobstatus: true});
+                    // axios.post("http://10.234.4.106:8080/recruiter/appliedJobs", row.id).then(response => {
+                    //     console.log("response==" + response);
+                    //
+                    //     return (<Redirect to={'/jobseeker'}/>);
+                    //
+                    //
+                    // }).catch(error => {
+                    //     console.log("error==" + error);
+                    // })
                 }
             }
-            ] ,update: [{
+            ], update: [{
                 icon: <input type="button" className="button" value="Update"/>,
                 callback: () => {
                     alert("updated")
@@ -170,7 +179,7 @@ class JobReport extends React.Component {
 
     onChangeHandler = event => {
         console.log(event.target.files[0]);
-        this.setState({file:event.target.files[0]})
+        this.setState({file: event.target.files[0]})
     }
 
     applyForJob() {
@@ -190,9 +199,9 @@ class JobReport extends React.Component {
 
         axios.post("http://10.234.4.106:8080/recruiter/applyforjob", this.state).then(response => {
             console.log("response==" + response);
-            if(response.data.body.errorMessage){
+            if (response.data.body.errorMessage) {
                 alert(response.data.body.errorMessage);
-            }else{
+            } else {
                 alert(response.data.body);
             }
         }).catch(error => {
@@ -201,6 +210,10 @@ class JobReport extends React.Component {
     }
 
     render() {
+
+        if (this.state.jobstatus) {
+            return (<Redirect to={'/applyjoblist'}/>);
+        }
         if (this.state.applyJob) {
             return (
                 <div>

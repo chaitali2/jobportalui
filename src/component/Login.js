@@ -2,43 +2,59 @@ import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom'
 import axios from "axios";
 import HomeHeader from "./HomeHeader";
+import ApiService from "./ApiService";
 
 // import './Login.css';
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             username: '',
             password: '',
             userDetail: '',
             redirectToReferrer: false
-        };
+        }
+
         this.login = this.login.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
 
-    login() {
+    login(event) {
+        event.preventDefault();
         console.log(this.state.redirectToReferrer);
-        axios.post("http://10.234.4.106:8080/authentication/login", this.state)
+
+        var credential = {
+            "username": this.state.username,
+            "password": this.state.password
+        }
+
+        ApiService.fetchByUserName(credential)
             .then(response => {
                 console.log(response);
+                if (response.data.status == 200) {
+                    let userdata = response.data.body;
+                    sessionStorage.setItem('userData', JSON.stringify(userdata));
+                    sessionStorage.setItem('username', response.data.body.username);
+                    sessionStorage.setItem('id', response.data.body.id);
+                    sessionStorage.setItem('token', response.data.body.token);
+                    sessionStorage.setItem('userType', response.data.body.typeOfUser);
+                    this.setState({redirectToReferrer: true});
 
-                if (response.data.statusCode == 'OK') {
-                    if (response.data.body.errorMessage) {
-                        alert(response.data.body.errorMessage);
-                    } else {
-                        let userdata = response.data.body;
-                        sessionStorage.setItem('userData', JSON.stringify(userdata));
-                        sessionStorage.setItem('username', response.data.body.username);
-                        sessionStorage.setItem('id', response.data.body.id);
-                        sessionStorage.setItem('token', response.data.body.token);
-                        sessionStorage.setItem('userType', response.data.body.typeOfUser);
-                        this.setState({redirectToReferrer: true});
+                    if (userdata.typeOfUser == 'R') {
+                        this.props.history.push('/recruiter')
+                        window.location.reload();
+                    } else if (userdata.typeOfUser == 'J') {
+                        this.props.history.push('/jobseeker')
+                        window.location.reload();
                     }
                 }
-            }).catch(error => {
+            })
+            .catch(error => {
             console.log(error)
+            if (error.response.status === 500) {
+                alert(error.response.data);
+            }
         })
 
     }
@@ -53,26 +69,28 @@ class Login extends Component {
 
         const {username, password} = this.state
 
-        console.log(this.state.redirectToReferrer + "===" + sessionStorage.getItem('userData'));
-        console.log(this.state.username);
-        console.log(this.state.id);
-        if (this.state.redirectToReferrer) {
-            if (sessionStorage.getItem("userType") == 'J') {
-                return (<Redirect to={'/jobseeker'}/>);
-            } else if (sessionStorage.getItem("userType") == 'R') {
-                return (<Redirect to={'/recruiter'}/>);
-            }
-        }
+        // if (this.state.redirectToReferrer) {
+        //     if (sessionStorage.getItem("userType") == 'J') {
+        //         return (<Redirect to={'/jobseeker'}/>);
+        //     } else if (sessionStorage.getItem("userType") == 'R') {
+        //         return (<Redirect to={'/recruiter'}/>);
+        //     }
+        // }
         return (
             <div id="main-registration-container">
                 <HomeHeader/>
                 <div id="login">
                     <h4>Login</h4>
-                    <label>Username</label>
-                    <input type="text" name="username" onChange={this.onChange}/>
-                    <label>Password</label>
-                    <input type="password" name="password" onChange={this.onChange}/>
-                    <input type="submit" value="Login" onClick={this.login}/>
+                    <form onSubmit={(event) => this.login(event)}>
+
+                        <label>Username</label>
+                        <input type="text" name="username" onChange={this.onChange}/>
+
+                        <label>Password</label>
+                        <input type="password" name="password" onChange={this.onChange}/>
+
+                        <input type="submit" value="Login"/>
+                    </form>
                     <Link activeStyle={{color: 'green'}} to={"/registration"}>Registrartion</Link>
                 </div>
             </div>
