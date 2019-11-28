@@ -11,6 +11,7 @@ import PostJobs from "./component/PostJobs";
 import JobReport from "./component/JobReport";
 import Profile from "./component/Profile";
 import ApplyJobs from "./component/ApplyJobs";
+import Job from "./component/Job";
 import { BrowserRouter as Router} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/jobseeker" component={JobSeeker} />
             <Route path="/recruiter" component={Recruiter} />
             <Route path="/applyjoblist" component={ApplyJobs} />
+            <Route path="/job" component={Job} />
         </div>
     </Router>
 );

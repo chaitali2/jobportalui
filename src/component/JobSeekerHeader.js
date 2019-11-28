@@ -4,28 +4,28 @@ import {Link} from "react-router-dom";
 
 class JobSeekerHeader extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            redirectToReferrer: false,
+            isLoggedIn: false,
             username: sessionStorage.getItem("username"),
         };
     }
 
     componentWillMount() {
-        if (sessionStorage.getItem("userData")) {
+        if (sessionStorage.getItem("token")) {
         } else {
-            this.setState({redirectToReferrer: true});
+            this.setState({isLoggedIn: true});
         }
     }
 
     logout() {
-        sessionStorage.setItem("userData", "");
+        sessionStorage.setItem("token", "");
         sessionStorage.clear();
     }
 
     render() {
-        if (this.state.redirectToReferrer) {
+        if (this.state.isLoggedIn) {
             return (<Redirect to={'/login'}/>);
         }
         return (

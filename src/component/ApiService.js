@@ -1,41 +1,41 @@
 import axios from 'axios';
 
-const USER_API_BASE_URL = 'http://localhost:8080/users';
+const USER_API_BASE_URL = 'http://10.234.4.106:8080/';
 
 class ApiService {
 
-    fetchUsers() {
-        return axios.get(USER_API_BASE_URL);
-    }
-
-    fetchUserById(userId) {
-        return axios.get(USER_API_BASE_URL + '/' + userId);
-    }
-
-    deleteUser(userId) {
-        return axios.delete(USER_API_BASE_URL + '/' + userId);
-    }
-
-    addUser(user) {
-        return axios.post(""+USER_API_BASE_URL, user);
-    }
-
-    editUser(user) {
-        return axios.put(USER_API_BASE_URL + '/' + user.id, user);
-    }
-
     fetchJobById(jobId) {
-        return axios.post("http://10.234.4.106:8080/recruiter/appliedJobs",jobId);
+        return axios.post(USER_API_BASE_URL + "recruiter/appliedJobs", jobId);
     }
 
     fetchByUserName(data) {
-        return axios.post("http://10.234.4.106:8080/authentication/login",data);
+        return axios.post(USER_API_BASE_URL + "authentication/login", data);
     }
 
     postUserDetail(data) {
-        return axios.post("http://10.234.4.106:8080/registration/registerUserDetail",data)
+        return axios.post(USER_API_BASE_URL + "registration/registerUserDetail", data)
     }
 
+    postJobDetail(data) {
+        return axios.post(USER_API_BASE_URL + "recruiter/post_jobs", data)
     }
+
+    getJobDetail(data) {
+        return axios.post(USER_API_BASE_URL + "recruiter/jobDetails", data)
+    }
+
+    deleteJobPost(data) {
+        return axios.post(USER_API_BASE_URL + "recruiter/removejobpost", data)
+    }
+
+    getJobDetailOfCompany(data) {
+        return axios.post(USER_API_BASE_URL + "recruiter/jobdetailofcompany", data);
+    }
+
+    getcategories() {
+        return axios.get(USER_API_BASE_URL + "recruiter/categories");
+    }
+
+}
 
 export default new ApiService();

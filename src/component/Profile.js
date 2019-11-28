@@ -24,7 +24,9 @@ class Profile extends Component {
         })
     }
 
-    render() {
+
+
+        render() {
         if (this.state.userType == 'R') {
             return (
                 <div>

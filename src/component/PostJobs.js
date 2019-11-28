@@ -3,26 +3,27 @@ import RecruiterHeader from "./RecruiterHeader";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ApiService from "./ApiService";
+import {Redirect} from "react-router";
 
 class PostJobs extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            category:'',
-            company:'',
-            skills:[],
-            job_type:'',
-            experience:'',
-            salary_offer:'',
-            street_add:'',
-            city:'',
-            state:'',
-            pincode:'',
-            // job_opening_date:'',
-            description:'',
+            category: '',
+            categories: [],
+            company: '',
+            skills: [],
+            job_type: '',
+            experience: '',
+            salary_offer: '',
+            street_add: '',
+            city: '',
+            state: '',
+            pincode: '',
+            description: '',
             posted_by_id: sessionStorage.getItem("id"),
             job_opening_date: new Date()
-
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -31,15 +32,55 @@ class PostJobs extends React.Component {
 
     };
 
-    savePostedJobDetail(){
+    componentWillMount() {
 
-        axios.post("http://10.234.4.106:8080/recruiter/post_jobs",this.state).then(response => {
-        }).catch(error=>{
-            console.log("error=="+error);
+        ApiService.getcategories()
+            .then(response => {
+                console.log(response);
+                if (response.data.statusCodeValue == 200) {
+                    alert(response.data.body);
+
+                    // let categoeryFromApi = response.map(category => { return {value: category, display: category} })
+                    // this.setState({ categories: [{value: '', display: '(Select Category)'}].concat(categoeryFromApi) });
+                    this.setState({categories:response.data.body})
+                }
+            }).catch(error => {
+            console.log("error==" + error);
+        })
+
+    }
+
+    savePostedJobDetail() {
+
+        const jobdetail = {
+            "category": this.state.category,
+            "company": this.state.company,
+            "skills": this.state.skills,
+            "job_type": this.state.job_type,
+            "experience": this.state.experience,
+            "salary_offer": this.state.salary_offer,
+            "street_add": this.state.street_add,
+            "city": this.state.city,
+            "state": this.state.state,
+            "pincode": this.state.pincode,
+            "description": this.state.description,
+            "posted_by_id": this.state.posted_by_id,
+            "job_opening_date": this.state.job_opening_date
+        }
+
+        ApiService.postJobDetail(jobdetail)
+            .then(response => {
+                console.log(response);
+                if (response.data.statusCodeValue == 200) {
+                    alert(response.data.body);
+                    window.location.reload();
+                }
+            }).catch(error => {
+            console.log("error==" + error);
         })
     }
 
-    handleChangeMultiSelect(e){
+    handleChangeMultiSelect(e) {
         var options = e.target.options;
         var value = [];
         let l = options.length;
@@ -48,7 +89,7 @@ class PostJobs extends React.Component {
                 value.push(options[i].value);
             }
         }
-        this.setState({skills:value});
+        this.setState({skills: value});
     }
 
     handleChangedate = date => {
@@ -58,11 +99,14 @@ class PostJobs extends React.Component {
     };
 
 
-
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
+
     render() {
+        if (this.state.isLoggedIn) {
+            return (<Redirect to={'/login'}/>);
+        }
         return (
             <div>
                 <RecruiterHeader/>
@@ -74,12 +118,22 @@ class PostJobs extends React.Component {
                         <input type="text" name="company" onChange={this.handleChange}/>
 
                         <label>Category :</label>
-                        <select name="category"  onChange={this.handleChange}>
-                            <option value="devloper">Developer</option>
-                            <option value="fe_developer">Front End Developer</option>
-                            <option value="dba">DBA</option>
-                            <option value="testing">Tester</option>
+                        <select>
+                            {this.state.categories.map(o => <option key={o.category_id} value={o.category_id}>{o.categoryName}</option>)}
                         </select>
+
+
+                        {/*<select name="category" onChange={this.handleChange}>*/}
+                        {/*    {this.state.categories.map((category) => <option key={category.value} value={category.value}>{category.display}</option>)}*/}
+                        {/*</select>*/}
+
+
+
+                            {/*    <option value="devloper">Developer</option>*/}
+                        {/*    <option value="fe_developer">Front End Developer</option>*/}
+                        {/*    <option value="dba">DBA</option>*/}
+                        {/*    <option value="testing">Tester</option>*/}
+                        {/*</select>*/}
 
                         <label>Skills :</label>
                         <select name="skills" multiple={true} onChange={this.handleChangeMultiSelect}>
@@ -95,7 +149,7 @@ class PostJobs extends React.Component {
                         </select>
 
                         <label>Job Type :</label>
-                        <select name="job_type"  onChange={this.handleChange}>
+                        <select name="job_type" onChange={this.handleChange}>
                             <option value="P">Permanent</option>
                             <option value="C">Contract</option>
                         </select>
@@ -119,7 +173,6 @@ class PostJobs extends React.Component {
                         <input type="text" maxLength={6} name="pincode" onChange={this.handleChange}/>
 
                         <label>Job Opening Date :</label>
-                        {/*<input type="text" name="job_opening_date" onChange={this.handleChange}/>*/}
                         <DatePicker
                             selected={this.state.job_opening_date}
                             onChange={this.handleChangedate}

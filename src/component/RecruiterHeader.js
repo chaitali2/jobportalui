@@ -3,29 +3,32 @@ import {Link, Redirect} from "react-router-dom";
 
 class RecruiterHeader extends React.Component {
 
-
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            redirectToReferrer: false,
+            isLoggedIn: false,
             username: sessionStorage.getItem("username"),
         };
+
+        this.logout = this.logout.bind(this);
+
     }
 
     componentWillMount() {
-        if (sessionStorage.getItem("userData")) {
+        if (sessionStorage.getItem("token")) {
         } else {
-            this.setState({redirectToReferrer: true});
+            this.setState({isLoggedIn: true});
         }
     }
 
     logout() {
-        sessionStorage.setItem("userData", "");
+        sessionStorage.setItem("token", "");
         sessionStorage.clear();
+        // this.props.history.push('/login')
     }
 
     render() {
-        if (this.state.redirectToReferrer) {
+        if (this.state.isLoggedIn) {
             return (<Redirect to={'/login'}/>);
         }
 
@@ -34,7 +37,7 @@ class RecruiterHeader extends React.Component {
             <div className="header">
                 <label className="label label-primary">JOB Portal</label>
                 <label className="label label-primary"> <Link to={"/postJobs"}>Post Jobs</Link></label>
-                <label className="label label-primary"> <Link to={"/jobReport"}>Job List</Link></label>
+                <label className="label label-primary" onClick={this.JobReport}> <Link to={"/jobReport"}>Job List</Link></label>
                 <label className="label label-primary">Apply Job List</label>
                 <label className="label label-primary"><Link to={"/profile"}>Profile</Link></label>
                 <label className="label label-primary">{this.state.username}</label>

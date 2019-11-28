@@ -5,6 +5,7 @@ import RecruiterHeader from "./RecruiterHeader";
 import ReactDOM from "react-dom";
 import JobSeekerHeader from "./JobSeekerHeader";
 import {Redirect} from "react-router";
+import ApiService from "./ApiService";
 
 const columns = [
     {key: "id", name: "JOB ID", editable: true},
@@ -43,86 +44,127 @@ const columnsrecruiter = [
     {key: "delete", name: "Delete", editable: true}
 ]
 
+function NorecordFound() {
+    return (
+        <div>
+            <RecruiterHeader/>
+            <div className="maindiv">
+                <input type="button" className="button" value="Report" onClick={this.generateReport}/>
+                <h3>No Record Found !!</h3>
+            </div>
+        </div>
+    );
+}
+
+function RecruiterJobReport() {
+    return (
+        <div>
+            <RecruiterHeader/>
+            <div className="maindiv">
+                <input type="button" className="button" value="Report" onClick={this.generateReport}/>
+                <div>
+                    <ReactDataGrid
+                        columns={columnsrecruiter}
+                        rowGetter={i => this.state.rows[i]}
+                        rowsCount={this.state.rowslength}
+                        onGridRowsUpdated={this.onGridRowsUpdated}
+                        enableCellSelect={true}
+                        getCellActions={this.getCellActionOnRecruiter}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+function JobSeekerReport() {
+    return (
+        <div>
+            <JobSeekerHeader/>
+            <div className="maindiv">
+                <input type="button" className="button" value="Report" onClick={this.generateReport}/>
+                <div>
+                    <ReactDataGrid
+                        columns={columns}
+                        rowGetter={i => this.state.rows[i]}
+                        rowsCount={this.state.rowslength}
+                        onGridRowsUpdated={this.onGridRowsUpdated}
+                        enableCellSelect={true}
+                        getCellActions={this.getCellActionsOnJobSeeker}
+                        onCellSelected={this.onCellSelected}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+
+}
+
 class JobReport extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            redirectToReferrer: false,
             username: sessionStorage.getItem("username"),
             token: sessionStorage.getItem("token"),
             userType: sessionStorage.getItem("userType"),
             user_id: sessionStorage.getItem("id"),
             rows: [],
             rowslength: 0,
-            applyJob: false,
             job_id: '',
             file: null,
             jobstatus: false
         }
-        this.generateReport = this.generateReport.bind(this);
-        this.getCellActions = this.getCellActions.bind(this);
-        this.getCellActionOnupdate = this.getCellActionOnupdate.bind(this);
-        this.applyForJob = this.applyForJob.bind(this);
+        this.getCellActionsOnJobSeeker = this.getCellActionsOnJobSeeker.bind(this);
+        this.getCellActionOnRecruiter = this.getCellActionOnRecruiter.bind(this);
+        // this.applyForJob = this.applyForJob.bind(this);
         this.onChangeHandler = this.onChangeHandler.bind(this);
     };
 
     componentWillMount() {
-
         let jobListURL = "";
         if (this.state.userType == 'R') {
-            axios.post("http://10.234.4.106:8080/recruiter/jobDetails", this.state.user_id).then(response => {
-                console.log("response====>" + response);
-                this.setState({rows: response.data.body})
-                this.setState({rowslength: response.data.body.length})
+
+            ApiService.getJobDetail(this.state.user_id).then(response => {
+                console.log(response);
+                if (response.data.statusCodeValue == 200) {
+                    this.setState({rows: response.data.body})
+                    this.setState({rowslength: response.data.body.length})
+                } else if (response.data.statusCodeValue == 500) {
+                    alert(response.data.body.errorMessage);
+                    this.setState({error: response.data.body.errorMessage})
+                }
             }).catch(error => {
                 console.log("error==" + error);
             })
         } else {
-            axios.post("http://10.234.4.106:8080/recruiter/jobDetails", '').then(response => {
-                console.log("response====>" + response);
-                this.setState({rows: response.data.body})
-                this.setState({rowslength: response.data.body.length})
+            ApiService.getJobDetail('').then(response => {
+                console.log(response);
+                if (response.data.statusCodeValue == 200) {
+                    this.setState({rows: response.data.body})
+                    this.setState({rowslength: response.data.body.length})
+                } else if (response.data.statusCodeValue == 500) {
+                    alert(response.data.body.errorMessage);
+                    this.setState({error: response.data.body.errorMessage})
+                }
             }).catch(error => {
                 console.log("error==" + error);
             })
         }
+
     }
 
-    generateReport() {
-        if (this.state.userType = 'R') {
 
-            axios.post("http://10.234.4.106:8080/recruiter/jobDetails", this.state.user_id).then(response => {
-                this.setState({rows: response.data.body})
-                this.setState({rowslength: response.data.body.length})
-            }).catch(error => {
-                console.log("error==" + error);
-            })
-        } else {
-
-            axios.post("http://10.234.4.106:8080/recruiter/jobDetails", '').then(response => {
-                this.setState({rows: response.data.body})
-                this.setState({rowslength: response.data.body.length})
-            }).catch(error => {
-                console.log("error==" + error);
-            })
-        }
-    }
-
-    componentDidMount() {
-        this.setState({applyJob: false});
-    }
-
-    getCellActions(column, row) {
+    getCellActionsOnJobSeeker(column, row) {
         const cellActions = {
             apply: [{
                 icon: <input type="button" className="button" value="Apply Job"/>,
                 callback: () => {
-                    axios.post("http://10.234.4.106:8080/recruiter/jobdetailofcompany", row.id).then(response => {
+                    ApiService.getJobDetailOfCompany(row.id).then(response => {
                         console.log("response==" + response);
                         this.setState({jobdesc: response.data.body});
                         this.setState({applyJob: true});
                         this.setState({job_id: response.data.body.id});
-
                     }).catch(error => {
                         console.log("error==" + error);
                     })
@@ -133,7 +175,8 @@ class JobReport extends React.Component {
         return cellActions[column.key];
     }
 
-    getCellActionOnupdate(column, row) {
+
+    getCellActionOnRecruiter(column, row) {
         const cellActions = {
             view: [{
                 icon: <input type="button" className="button" value="View"/>,
@@ -164,11 +207,18 @@ class JobReport extends React.Component {
             delete: [{
                 icon: <input type="button" className="button" value="Delete"/>,
                 callback: () => {
-                    alert("removed")
+                    ApiService.deleteJobPost(row.id)
+                        .then(response => {
+                            console.log("response==" + response);
 
-                    axios.post("http://10.234.4.106:8080/recruiter/removejobpost", row.id).then(response => {
-                        console.log("response==" + response);
-                    }).catch(error => {
+                            if (response.data.statusCodeValue == 200) {
+                                alert(response.data.body);
+                                window.location.reload();
+                            } else if (response.data.statusCodeValue == 500) {
+                                alert(response.data.body.errorMessage);
+                            }
+
+                        }).catch(error => {
                         console.log("error==" + error);
                     })
                 }
@@ -182,118 +232,56 @@ class JobReport extends React.Component {
         this.setState({file: event.target.files[0]})
     }
 
-    applyForJob() {
-        alert(document.getElementById("jobid").value);
-        alert(this.state.job_id);
+    // applyForJob() {
+    //     alert(document.getElementById("jobid").value);
+    //     alert(this.state.job_id);
+    //
+    //     var formData = new FormData();
+    //     // formData.append('file', this.state.file);
+    //     formData.append('job_id', this.state.job_id);
+    //     formData.append('user_id', this.state.user_id);
+    //
+    //     const config = {
+    //         headers: {
+    //             'content-type': 'multipart/form-data'
+    //         }
+    //     };
+    //
+    //     axios.post("http://10.234.4.106:8080/recruiter/applyforjob", this.state).then(response => {
+    //         console.log("response==" + response);
+    //         if (response.data.body.errorMessage) {
+    //             alert(response.data.body.errorMessage);
+    //         } else {
+    //             alert(response.data.body);
+    //         }
+    //     }).catch(error => {
+    //         console.log("error==" + error);
+    //     })
+    // }
 
-        var formData = new FormData();
-        // formData.append('file', this.state.file);
-        formData.append('job_id', this.state.job_id);
-        formData.append('user_id', this.state.user_id);
-
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        };
-
-        axios.post("http://10.234.4.106:8080/recruiter/applyforjob", this.state).then(response => {
-            console.log("response==" + response);
-            if (response.data.body.errorMessage) {
-                alert(response.data.body.errorMessage);
-            } else {
-                alert(response.data.body);
-            }
-        }).catch(error => {
-            console.log("error==" + error);
-        })
-    }
 
     render() {
-
-        if (this.state.jobstatus) {
-            return (<Redirect to={'/applyjoblist'}/>);
-        }
-        if (this.state.applyJob) {
-            return (
-                <div>
-                    <JobSeekerHeader/>
-                    <div id="main-registration-container">
-                        <div id="register">
-                            <h3>Job Detail</h3>
-                            <input type="hidden" id="jobid" value={this.state.jobdesc.id}/>
-                            <label> Company :</label>
-                            <label>{this.state.jobdesc.company}</label>
-
-                            <label> Category :</label>
-                            <label>{this.state.jobdesc.category}</label>
-
-                            <label> Experience :</label>
-                            <label>{this.state.jobdesc.experience}</label>
-
-                            <label> Offer Salary :</label>
-                            <label> {this.state.jobdesc.salary_offer}</label>
-
-                            <label> Skills :</label>
-                            <label>{this.state.jobdesc.skills.length}</label>
-
-                            <label> Address :</label>
-                            <label>{this.state.jobdesc.street_add} , {this.state.jobdesc.city} , {this.state.jobdesc.state} - {this.state.jobdesc.pincode}</label>
-
-                            <label> Description :</label>
-                            <label>{this.state.jobdesc.description}</label>
-
-                            <label> Resume :</label>
-                            <input type="file" onChange={this.onChangeHandler}/>
-
-                            <input type="button" className="button" value="Apply" onClick={this.applyForJob}/>
-
-                        </div>
-                    </div>
-
-                </div>
-            );
-        }
         if (this.state.userType == 'R') {
-            return (
-                <div>
-                    <RecruiterHeader/>
-                    <div className="maindiv">
-                        <input type="button" className="button" value="Report" onClick={this.generateReport}/>
-                        <div>
-                            <ReactDataGrid
-                                columns={columnsrecruiter}
-                                rowGetter={i => this.state.rows[i]}
-                                rowsCount={this.state.rowslength}
-                                onGridRowsUpdated={this.onGridRowsUpdated}
-                                enableCellSelect={true}
-                                getCellActions={this.getCellActionOnupdate}
-                            />
-                        </div>
-                    </div>
-                </div>
-            );
-        } else if (this.state.userType == 'J' && !this.state.applyJob) {
-            return (
+            if (this.state.rowslength == 0) {
+                return (
+                    <div>
 
-                <div>
-                    <JobSeekerHeader/>
-                    <div className="maindiv">
-                        <input type="button" className="button" value="Report" onClick={this.generateReport}/>
-                        <div>
-                            <ReactDataGrid
-                                columns={columns}
-                                rowGetter={i => this.state.rows[i]}
-                                rowsCount={this.state.rowslength}
-                                onGridRowsUpdated={this.onGridRowsUpdated}
-                                enableCellSelect={true}
-                                getCellActions={this.getCellActions}
-                                onCellSelected={this.onCellSelected}
-                            />
-                        </div>
+                        <NorecordFound/>
                     </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <RecruiterJobReport/>
+                    </div>
+                );
+            }
+        } else if (this.state.userType == 'J') {
+            return (
+                <div>
+                    <JobSeekerReport/>
                 </div>
-            );
+            )
         }
 
     }
