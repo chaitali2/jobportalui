@@ -36,6 +36,18 @@ class ApiService {
         return axios.get(USER_API_BASE_URL + "recruiter/categories");
     }
 
+    getSkill(data) {
+        return axios.post(USER_API_BASE_URL + "recruiter/skills",data);
+    }
+
+    applyforjob(data,config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/applyforjob",data,config);
+    }
+
+    loadJobsApplied(data) {
+        return axios.post(USER_API_BASE_URL + "recruiter/viewJobsApplied",data);
+    }
+
 }
 
 export default new ApiService();
