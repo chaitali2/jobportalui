@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import ReactDataGrid from "react-data-grid";
-import RecruiterHeader from "./RecruiterHeader";
+import RecruiterHeader from "./recruiter/RecruiterHeader";
 import ReactDOM from "react-dom";
 import JobSeekerHeader from "./JobSeekerHeader";
 import {Redirect} from "react-router";
-import ApiService from "./ApiService";
-import RecruiterJobReport from "./RecruiterJobReport";
+import ApiService from "./service/ApiService";
+import RecruiterJobReport from "./recruiter/RecruiterJobReport";
 import JobSeekerReport from "./JobSeekerReport";
 
 

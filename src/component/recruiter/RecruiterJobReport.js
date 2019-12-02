@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDataGrid from "react-data-grid";
 import RecruiterHeader from "./RecruiterHeader";
-import ApiService from "./ApiService";
+import ApiService from "../service/ApiService";
 
 
 const columnsrecruiter = [

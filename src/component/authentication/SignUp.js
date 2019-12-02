@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import HomeHeader from "./HomeHeader";
-import ApiService from "./ApiService";
+import ApiService from "../service/ApiService";
 import DatePicker from "react-datepicker";
 
 class SignUp extends React.Component {
@@ -14,7 +14,7 @@ class SignUp extends React.Component {
             mobno: "",
             password: "",
             confpassword: "",
-            typeOfUser: "",
+            usertype: "",
             errors: {},
             dob: new Date()
 
@@ -31,7 +31,6 @@ class SignUp extends React.Component {
 
     registration(event) {
         event.preventDefault();
-
         const userdetail = {
             "firstname": this.state.firstname,
             "lastname": this.state.lastname,
@@ -40,20 +39,30 @@ class SignUp extends React.Component {
             "mobno": this.state.mobno,
             "password": this.state.password,
             "confpassword": this.state.confpassword,
-            "typeOfUser": this.state.typeOfUser
+            "usertype": this.state.usertype
         }
+
         if (this.validateForm()) {
 
-            ApiService.postUserDetail(userdetail)
+            ApiService.signup(userdetail)
                 .then(response => {
                     console.log(response);
                     console.log("response.status==" + response.status);
                     if (response.status === 200) {
                         alert(response.data)
-                        this.props.history.push('/login')
+                        this.props.history.push('/jobportal/login')
                     }
                 }).catch(error => {
-                console.log(error)
+
+                alert(error.response.status);
+
+                if (error.response.status == 400) {
+                    if (error.response.data.errorMessage) {
+                        alert(error.response.data.errorMessage);
+                    } else {
+                        alert(error.response.data);
+                    }
+                }
             })
         }
 
@@ -126,9 +135,9 @@ class SignUp extends React.Component {
             errors["confpassword"] = "*Please enter secure and strong confirm password.";
         }
 
-        if (!this.state.typeOfUser) {
+        if (!this.state.usertype) {
             formIsValid = false;
-            errors["typeOfUser"] = "*Please select User Type";
+            errors["usertype"] = "*Please select User Type";
         }
 
         this.setState({
@@ -196,12 +205,12 @@ class SignUp extends React.Component {
                         <span style={{color: "red"}}>{this.state.errors["confpassword"]}</span>
 
                         <label>Type of User :</label>
-                        <select name="typeOfUser" onChange={this.handleChange}>
+                        <select name="usertype" onChange={this.handleChange}>
                             <option value="">Select User Type</option>
                             <option value="J">JobSeeker</option>
                             <option value="R">Recruiter</option>
                         </select>
-                        <span style={{color: "red"}}>{this.state.errors["typeOfUser"]}</span>
+                        <span style={{color: "red"}}>{this.state.errors["usertype"]}</span>
 
                         <input type="submit" className="button" value="Register"/>
 

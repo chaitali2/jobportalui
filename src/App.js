@@ -1,13 +1,13 @@
 import React from 'react';
 import './css/Style.css';
-import Login from "./component/Login";
+import Login from "./component/authentication/Login";
 import Home from "./component/Home";
-import HomeHeader from "./component/HomeHeader";
-import SignUp from "./component/SignUp";
+import HomeHeader from "./component/authentication/HomeHeader";
+import SignUp from "./component/authentication/SignUp";
 import JobPortalHome from "./component/JobPortalHome";
 import JobSeeker from "./component/JobSeeker";
-import Recruiter from "./component/Recruiter";
-import PostJobs from "./component/PostJobs";
+import Recruiter from "./component/recruiter/Recruiter";
+import PostJobs from "./component/recruiter/PostJobs";
 import JobReport from "./component/JobReport";
 import Profile from "./component/Profile";
 import ApplyJobs from "./component/ApplyJobs";
@@ -20,14 +20,14 @@ const App = () => (
         <div >
             <Route path="/profile" component={Profile} />
             <Route path="/jobReport" component={JobReport} />
-            <Route path="/postJobs" component={PostJobs} />
+            <Route path="/jobportal/postJobs" component={PostJobs} />
             <Route path="/home" component={Home} />
             <Route path="/welcome" component={HomeHeader} />
-            <Route path="/login" component={Login} />
-            <Route path="/registration" component={SignUp} />
+            <Route path="/jobportal/login" component={Login} />
+            <Route path="/jobportal/signup" component={SignUp} />
             <Route path="/portal" component={JobPortalHome} />
             <Route path="/jobseeker" component={JobSeeker} />
-            <Route path="/recruiter" component={Recruiter} />
+            <Route path="/jobportal/recruiter" component={Recruiter} />
             <Route path="/applyjoblist" component={ApplyJobs} />
             <Route path="/job" component={Job} />
         </div>

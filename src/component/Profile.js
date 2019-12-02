@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import RecruiterHeader from "./RecruiterHeader";
+import RecruiterHeader from "./recruiter/RecruiterHeader";
 import JobSeekerHeader from "./JobSeekerHeader";
 
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const USER_API_BASE_URL = 'http://10.234.4.106:8080/';
+const USER_API_BASE_URL = 'http://10.234.4.106:8080/api/jobportal/';
 
 class ApiService {
 
@@ -9,15 +9,15 @@ class ApiService {
     }
 
     fetchByUserName(data) {
-        return axios.post(USER_API_BASE_URL + "authentication/login", data);
+        return axios.post(USER_API_BASE_URL + "login", data);
     }
 
-    postUserDetail(data) {
-        return axios.post(USER_API_BASE_URL + "registration/registerUserDetail", data)
+    signup(data) {
+        return axios.post(USER_API_BASE_URL + "signup", data)
     }
 
     postJobDetail(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/post_jobs", data)
+        return axios.post(USER_API_BASE_URL + "recruiter/addjob_posts", data)
     }
 
     getJobDetail(data) {
@@ -32,12 +32,12 @@ class ApiService {
         return axios.post(USER_API_BASE_URL + "recruiter/jobdetailofcompany", data);
     }
 
-    getcategories() {
-        return axios.get(USER_API_BASE_URL + "recruiter/categories");
+    getcategories(config) {
+        return axios.get(USER_API_BASE_URL + "recruiter/loadCategory",config);
     }
 
     getSkill(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/skills",data);
+        return axios.post(USER_API_BASE_URL + "recruiter/loadskill",data);
     }
 
     applyforjob(data,config) {

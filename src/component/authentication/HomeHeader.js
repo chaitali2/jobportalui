@@ -7,8 +7,8 @@ class HomeHeader extends Component {
             <div>
                 <div className="header">
                     <label className="label label-primary"> <Link to={"/welcome"}>JOB PORTAL</Link></label>
-                    <label className="label label-primary "> <Link to={"/login"}>Login</Link></label>
-                    <label className="label label-primary"><Link to={"/registration"}>Sign Up</Link></label>
+                    <label className="label label-primary "> <Link to={"/jobportal/login"}>Login</Link></label>
+                    <label className="label label-primary"><Link to={"/jobportal/signup"}>Sign Up</Link></label>
                 </div>
             </div>
         );

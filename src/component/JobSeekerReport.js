@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDataGrid from "react-data-grid";
 import JobSeekerHeader from "./JobSeekerHeader";
-import ApiService from "./ApiService";
+import ApiService from "./service/ApiService";
 
 const columnsjobseeker = [
     {key: "id", name: "JOB ID", editable: true},

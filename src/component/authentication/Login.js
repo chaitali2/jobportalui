@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom'
 import HomeHeader from "./HomeHeader";
-import ApiService from "./ApiService";
+import ApiService from "../service/ApiService";
 
 class Login extends Component {
     constructor(props) {
@@ -47,32 +47,34 @@ class Login extends Component {
         if (this.validateForm()) {
             ApiService.fetchByUserName(credential)
                 .then(response => {
-                    console.log(response);
-                    console.log("response.status==" + response.status);
+                    alert("response.status==" + response.status);
 
-                    if (response.data.statusCodeValue == 200) {
+                    if (response.status == 200) {
                         let userdata = response.data.body;
-                        // sessionStorage.setItem('userData', JSON.stringify(userdata));
                         sessionStorage.setItem('username', response.data.body.username);
                         sessionStorage.setItem('id', response.data.body.id);
                         sessionStorage.setItem('token', response.data.body.token);
-                        sessionStorage.setItem('userType', response.data.body.typeOfUser);
+                        sessionStorage.setItem('userType', response.data.body.usertype);
                         this.setState({isLoggedIn: true});
 
-                        if (userdata.typeOfUser == 'R') {
-                            this.props.history.push('/recruiter')
+                        if (userdata.usertype == 'R') {
+                            this.props.history.push('/jobportal/recruiter')
                             window.location.reload();
-                        } else if (userdata.typeOfUser == 'J') {
-                            this.props.history.push('/jobseeker')
+                        } else if (userdata.usertype == 'J') {
+                            this.props.history.push('/jobportal/jobseeker')
                             window.location.reload();
                         }
-                    } else if (response.data.statusCodeValue == 500) {
-                        alert(response.data.body.errorMessage);
                     }
 
                 })
                 .catch(error => {
-                    console.log(error)
+                    alert(error.response.status);
+                    if (error.response.status == 400) {
+                        alert(error.response.data.errorMessage);
+                    }
+                    if (error.response.status == 500) {
+                        alert(error.response.data.errorMessage);
+                    }
                 })
         }
     }
