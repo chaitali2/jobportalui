@@ -48,6 +48,14 @@ class ApiService {
         return axios.post(USER_API_BASE_URL + "recruiter/viewJobsApplied",data);
     }
 
+    loadProfileDetails(data,config) {
+        return axios.post(USER_API_BASE_URL + "userdetails",data,config);
+    }
+
+    saveProfileDetails(data,config) {
+        return axios.post(USER_API_BASE_URL + "saveProfileDetail",data,config);
+    }
+
 }
 
 export default new ApiService();

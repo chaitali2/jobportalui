@@ -1,26 +1,10 @@
 import React, {Component} from 'react';
-import axios from "axios";
-import ReactDataGrid from "react-data-grid";
 import RecruiterHeader from "./recruiter/RecruiterHeader";
-import ReactDOM from "react-dom";
-import JobSeekerHeader from "./JobSeekerHeader";
-import {Redirect} from "react-router";
 import ApiService from "./service/ApiService";
 import RecruiterJobReport from "./recruiter/RecruiterJobReport";
-import JobSeekerReport from "./JobSeekerReport";
+import JobSeekerReport from "./jobseeker/JobSeekerReport";
+import JobSeekerHeader from "./jobseeker/JobSeekerHeader";
 
-
-function NorecordFound() {
-    return (
-        <div>
-            <RecruiterHeader/>
-            <div className="maindiv">
-                <input type="button" className="button" value="Report"/>
-                <h3>No Record Found !!</h3>
-            </div>
-        </div>
-    );
-}
 
 class JobReport extends React.Component {
     constructor(props) {
@@ -38,7 +22,9 @@ class JobReport extends React.Component {
         }
     };
 
+
     componentWillMount() {
+        alert(this.state.userType);
         let jobListURL = "";
         if (this.state.userType == 'R') {
 
@@ -72,33 +58,50 @@ class JobReport extends React.Component {
     }
 
 
-
-
-
-
     render() {
-        if (this.state.rowslength == 0) {
-            return (
-                <div>
-
-                    <NorecordFound/>
-                </div>
-            );
-        } else if (this.state.userType == 'R') {
-            return (
-                <div>
-                    <RecruiterJobReport rows_length={this.state.rowslength} rows={this.state.rows}/>
-                </div>
-            );
+        alert(this.state.userType);
+        if (this.state.userType == 'R') {
+            if (this.state.rowslength == 0) {
+                return (
+                    <div>
+                        <RecruiterHeader/>
+                        <div className="maindiv">
+                            <input type="button" className="button" value="Report"/>
+                            <h3>No Record Found !!</h3>
+                        </div>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <RecruiterJobReport rows_length={this.state.rowslength} rows={this.state.rows}/>
+                    </div>
+                );
+            }
         } else if (this.state.userType == 'J') {
-            return (
-                <div>
-                    <JobSeekerReport rows_length={this.state.rowslength} rows={this.state.rows}/>
-                </div>
-            )
-        }
 
+            if (this.state.rowslength == 0) {
+                return (
+                    <div>
+                        <JobSeekerHeader/>
+                        <div className="maindiv">
+                            <input type="button" className="button" value="Report"/>
+                            <h3>No Record Found !!</h3>
+                        </div>
+                    </div>
+
+                );
+            } else {
+                return (
+                    <div>
+                        <JobSeekerReport rows_length={this.state.rowslength} rows={this.state.rows}/>
+                    </div>
+                )
+            }
+        }
     }
+
 }
+
 
 export default JobReport

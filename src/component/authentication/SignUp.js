@@ -178,7 +178,7 @@ class SignUp extends React.Component {
                         <DatePicker
                             selected={this.state.dob}
                             onChange={this.handleChangedate}
-                            dateFormat="d-MM-yyyy"
+                            dateFormat="dd-MM-yyyy"
 
                         />
 

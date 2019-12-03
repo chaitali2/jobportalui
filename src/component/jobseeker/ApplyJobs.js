@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import ApiService from "./service/ApiService";
+import ApiService from "../service/ApiService";
 
 class ApplyJobs extends Component {
     constructor(props) {

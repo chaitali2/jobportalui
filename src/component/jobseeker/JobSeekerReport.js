@@ -1,23 +1,23 @@
 import React, {Component} from 'react';
 import ReactDataGrid from "react-data-grid";
 import JobSeekerHeader from "./JobSeekerHeader";
-import ApiService from "./service/ApiService";
+import ApiService from "../service/ApiService";
 
 const columnsjobseeker = [
-    {key: "id", name: "JOB ID", editable: true},
-    {key: "company", name: "Company", editable: true},
-    {key: "category_name", name: "Category", editable: true},
-    {key: "job_type", name: "Type Of Job", editable: true},
-    {key: "experience", name: "Experience", editable: true},
-    {key: "salary_offer", name: "Salary", editable: true},
-    {key: "street_add", name: "Road no/Area", editable: true},
-    {key: "city", name: "City", editable: true},
-    {key: "state", name: "State", editable: true},
-    {key: "pincode", name: "Pincode", editable: true},
-    {key: "job_opening_date", name: "Opening Date", editable: true},
-    {key: "description", name: "Description", editable: true},
-    {key: "skills", name: "Skills", editable: true},
-    {key: "apply", name: "Apply", editable: true}
+    {key: "id", name: "JOB ID"},
+    {key: "company", name: "Company"},
+    {key: "category_name", name: "Category"},
+    {key: "job_type", name: "Type Of Job"},
+    {key: "experience", name: "Experience"},
+    {key: "salary_offer", name: "Salary"},
+    {key: "street_add", name: "Road no/Area"},
+    {key: "city", name: "City"},
+    {key: "state", name: "State"},
+    {key: "pincode", name: "Pincode"},
+    {key: "job_opening_date", name: "Opening Date"},
+    {key: "description", name: "Description"},
+    {key: "skills", name: "Skills"},
+    {key: "apply", name: "Apply"}
 ]
 
 

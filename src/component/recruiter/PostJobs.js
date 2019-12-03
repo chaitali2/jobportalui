@@ -9,11 +9,12 @@ class PostJobs extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            category_id:0,
             categories: [],
+            skillvalue: [],
+
+            category_id:0,
             company: '',
             skills: [],
-            skillvalue: [],
             job_type: '',
             experience: 0.0,
             salary_offer: 0,
@@ -22,10 +23,13 @@ class PostJobs extends React.Component {
             state: '',
             pincode: 0,
             description: '',
-            posted_by_id: sessionStorage.getItem("id"),
             job_opening_date: new Date(),
+
+            posted_by_id: sessionStorage.getItem("id"),
             value: "select",
-            out: ""
+            out: "",
+            errors: {}
+
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -43,7 +47,6 @@ class PostJobs extends React.Component {
             }
         };
 
-        if (this.validateForm()) {
             ApiService.getcategories(config)
                 .then(response => {
                     console.log(response);
@@ -55,7 +58,7 @@ class PostJobs extends React.Component {
                 console.log(error);
                 this.props.history.push('/login')
             })
-        }
+
 
     }
 
@@ -63,7 +66,7 @@ class PostJobs extends React.Component {
         let errors = {};
         let formIsValid = true;
 
-        if (!this.state.category) {
+        if (!this.state.category_id) {
             formIsValid = false;
             errors["category"] = "*Please select category";
         }
@@ -74,7 +77,7 @@ class PostJobs extends React.Component {
             errors["company"] = "*Please enter your company.";
         }
 
-        if (!this.state.skills) {
+        if (this.state.skills.length<1) {
             formIsValid = false;
             errors["skills"] = "*Please select skills";
         }
@@ -134,7 +137,7 @@ class PostJobs extends React.Component {
 
     savePostedJobDetail() {
         const jobdetail = {
-            "category": this.state.category,
+            "category_id": this.state.category_id,
             "company": this.state.company,
             "skills": this.state.skills,
             "job_type": this.state.job_type,
@@ -149,15 +152,14 @@ class PostJobs extends React.Component {
             "job_opening_date": this.state.job_opening_date
         }
 
-        if (this.validateForm) {
+        if (this.validateForm()) {
             ApiService.postJobDetail(jobdetail)
                 .then(response => {
-                    console.log(response);
-                    if (response.data.status == 200) {
+                    if (response.status == 200) {
                         window.location.reload();
                     }
                 }).catch(error => {
-                alert(error.reponse.status);
+                alert(error);
             })
         }
     }
@@ -191,8 +193,7 @@ class PostJobs extends React.Component {
 
         ApiService.getSkill(e.target.value)
             .then(response => {
-                console.log(response);
-                if (response.data.status == 200) {
+                if (response.status == 200) {
                     this.setState({skillvalue: response.data.body})
                 }
             }).catch(error => {
@@ -202,7 +203,7 @@ class PostJobs extends React.Component {
 
     render() {
         if (this.state.isLoggedIn) {
-            return (<Redirect to={'/login'}/>);
+            return (<Redirect to={'/jobportal/login'}/>);
         }
         return (
             <div>
@@ -216,7 +217,7 @@ class PostJobs extends React.Component {
                         <span style={{color: "red"}}>{this.state.errors["company"]}</span>
 
                         <label>Category :</label>
-                        <select value={this.state.value} name="category" onChange={this.loadSkill}>
+                        <select name="category_id" onChange={this.loadSkill}>
                             <option value="">Select Category</option>
                             {this.state.categories.map(o => <option key={o.category_id}
                                                                     value={o.category_id}>{o.categoryName}</option>)}
@@ -233,6 +234,7 @@ class PostJobs extends React.Component {
 
                         <label>Job Type :</label>
                         <select name="job_type" onChange={this.handleChange}>
+                            <option value="">Select Job Type</option>
                             <option value="P">Permanent</option>
                             <option value="C">Contract</option>
                         </select>
@@ -240,7 +242,7 @@ class PostJobs extends React.Component {
 
 
                         <label>Experience :</label>
-                        <input type="text" placeholder="years" name="experience" onChange={this.handleChange}/>
+                        <input type="text" placeholder="YEARS" name="experience" onChange={this.handleChange}/>
                         <span style={{color: "red"}}>{this.state.errors["experience"]}</span>
 
 

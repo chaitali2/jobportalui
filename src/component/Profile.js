@@ -1,32 +1,81 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import RecruiterHeader from "./recruiter/RecruiterHeader";
-import JobSeekerHeader from "./JobSeekerHeader";
+import JobSeekerHeader from "./jobseeker/JobSeekerHeader";
+import ApiService from "./service/ApiService";
 
+const config = {
+    headers: {
+        'token': sessionStorage.getItem('token'),
+        'username': sessionStorage.getItem('username')
+    }
+};
 
 class Profile extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             redirectToReferrer: false,
-            user_id: sessionStorage.getItem("id"),
+            userID: sessionStorage.getItem("id"),
             userdetails: '',
             userType: sessionStorage.getItem("userType"),
+            firstname: "",
+            lastname: "",
+            mobno: "",
+            street_add: "",
+            city: "",
+            state: ""
         };
+        this.handleChange = this.handleChange.bind(this);
+        this.saveProfileDetail = this.saveProfileDetail.bind(this);
+
     }
 
     componentWillMount() {
-        axios.post("http://10.234.4.106:8080/recruiter/userdetails", this.state.user_id).then(response => {
+        this.profile()
+    }
+
+    profile() {
+        ApiService.loadProfileDetails(this.state.userID, config).then(response => {
+            this.setState({userdetails: response.data.body})
+            this.setState({firstname: response.data.body.firstname})
+            this.setState({lastname: response.data.body.lastname})
+            this.setState({mobno: response.data.body.mobno})
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    saveProfileDetail() {
+
+        const userdetail = {
+            "firstname": this.state.firstname,
+            "lastname": this.state.lastname,
+            "mobno": this.state.mobno,
+            "street_add": this.state.street_add,
+            "city": this.state.city,
+            "state": this.state.state,
+            "experience": this.state.experience,
+            "highest_degree": this.state.highest_degree,
+            "percentage": this.state.percentage,
+            "passing_year": this.state.passing_year,
+            "expected_salary": this.state.expected_salary,
+            "userID": sessionStorage.getItem("id")
+        }
+
+        ApiService.saveProfileDetails(userdetail, config).then(response => {
             this.setState({userdetails: response.data.body})
         }).catch(error => {
             console.log(error);
         })
     }
 
+    handleChange(e) {
+        this.setState({[e.target.name]: e.target.value});
+    }
 
-
-        render() {
+    render() {
         if (this.state.userType == 'R') {
             return (
                 <div>
@@ -43,16 +92,12 @@ class Profile extends Component {
                             <input type="text" name="lastname" value={this.state.userdetails.lastname}
                                    onChange={this.handleChange}/>
 
-                            <label>Email ID :</label>
-                            <input type="text" name="emailid" value={this.state.userdetails.emailid}
-                                   onChange={this.handleChange}/>
-
                             <label>Mobile No :</label>
                             <input type="text" name="mobno" value={this.state.userdetails.mobno}
                                    onChange={this.handleChange}/>
 
-                            <label>DOB :</label>
-                            <input type="text" name="dob" value={this.state.userdetails.dob}
+                            <label>Street Address :</label>
+                            <input type="text" name="street_add" value={this.state.userdetails.street_add}
                                    onChange={this.handleChange}/>
 
                             <label>City :</label>
@@ -63,29 +108,9 @@ class Profile extends Component {
                             <input type="text" name="state" value={this.state.userdetails.state}
                                    onChange={this.handleChange}/>
 
-                            <label>Experience :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
+                            <input type="button" className="button" value="Submit" onClick={this.saveProfileDetail}/>
 
-                            <label>Highest Degree :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
 
-                            <label>Percentage :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
-
-                            <label>Passing Year :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
-
-                            <label>Expected Salary :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
-
-                            <label>Skills :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
                         </div>
                     </div>
                 </div>
@@ -106,16 +131,8 @@ class Profile extends Component {
                             <input type="text" name="lastname" value={this.state.userdetails.lastname}
                                    onChange={this.handleChange}/>
 
-                            <label>Email ID :</label>
-                            <input type="text" name="emailid" value={this.state.userdetails.emailid}
-                                   onChange={this.handleChange}/>
-
                             <label>Mobile No :</label>
                             <input type="text" name="mobno" value={this.state.userdetails.mobno}
-                                   onChange={this.handleChange}/>
-
-                            <label>DOB :</label>
-                            <input type="text" name="dob" value={this.state.userdetails.dob}
                                    onChange={this.handleChange}/>
 
                             <label>City :</label>
@@ -127,28 +144,31 @@ class Profile extends Component {
                                    onChange={this.handleChange}/>
 
                             <label>Experience :</label>
-                            <input type="text" name="state" value=""
+                            <input type="text" name="experience" value={this.state.userdetails.experience}
                                    onChange={this.handleChange}/>
 
                             <label>Highest Degree :</label>
-                            <input type="text" name="state" value=""
+                            <input type="text" name="highest_degree" value={this.state.userdetails.highest_degree}
                                    onChange={this.handleChange}/>
 
                             <label>Percentage :</label>
-                            <input type="text" name="state" value=""
+                            <input type="text" name="percentage" value={this.state.userdetails.percentage}
                                    onChange={this.handleChange}/>
 
                             <label>Passing Year :</label>
-                            <input type="text" name="state" value=""
+                            <input type="text" name="passing_year" value={this.state.userdetails.passing_year}
                                    onChange={this.handleChange}/>
 
                             <label>Expected Salary :</label>
-                            <input type="text" name="state" value=""
+                            <input type="text" name="expected_salary" value={this.state.userdetails.expected_salary}
                                    onChange={this.handleChange}/>
 
-                            <label>Skills :</label>
-                            <input type="text" name="state" value=""
-                                   onChange={this.handleChange}/>
+                            {/*<label>Skills :</label>*/}
+                            {/*<input type="text" name="state" value=""*/}
+                            {/*       onChange={this.handleChange}/>*/}
+
+                            <input type="button" className="button" value="Submit" onClick={this.saveProfileDetail}/>
+
                         </div>
                     </div>
                 </div>
