@@ -3,19 +3,20 @@ import ReactDataGrid from "react-data-grid";
 import JobSeekerHeader from "./JobSeekerHeader";
 import ApiService from "../service/ApiService";
 
+
 const columnsjobseeker = [
-    {key: "id", name: "JOB ID"},
-    {key: "company", name: "Company"},
+    {key: "id", name: "JOB ID",width:0},
+    {key: "company", name: "Company",width:150},
     {key: "category_name", name: "Category"},
-    {key: "job_type", name: "Type Of Job"},
+    {key: "job_type", name: "Job Type"},
     {key: "experience", name: "Experience"},
     {key: "salary_offer", name: "Salary"},
-    {key: "street_add", name: "Road no/Area"},
+    {key: "street_add", name: "Road no/Area",width:250},
     {key: "city", name: "City"},
     {key: "state", name: "State"},
     {key: "pincode", name: "Pincode"},
     {key: "job_opening_date", name: "Opening Date"},
-    {key: "description", name: "Description"},
+    {key: "description", name: "Description",width:300},
     {key: "skills", name: "Skills"},
     {key: "apply", name: "Apply"}
 ]
@@ -31,7 +32,6 @@ class JobSeekerReport extends React.Component {
                 job_id: "",
                 user_id: sessionStorage.getItem("id"),
                 file: null
-
             }
         this.getCellActionsOnJobSeeker = this.getCellActionsOnJobSeeker.bind(this);
         this.applyForJob = this.applyForJob.bind(this);
@@ -46,7 +46,13 @@ class JobSeekerReport extends React.Component {
                 icon: <input type="button" className="button" value="Apply Job"/>,
                 callback: () => {
                     alert("apply")
-                    ApiService.getJobDetailOfCompany(row.id).then(response => {
+                    const config = {
+                        headers: {
+                            'token': sessionStorage.getItem('token'),
+                            'username': sessionStorage.getItem('username')
+                        }
+                    };
+                    ApiService.getJobDetailOfCompany(row.id,config).then(response => {
                         console.log("response==" + response);
                         this.setState({jobdesc: response.data.body});
                         this.setState({isApplyJob: true});
@@ -69,7 +75,6 @@ class JobSeekerReport extends React.Component {
     }
 
     applyForJob() {
-        alert(this.state.job_id);
 
         var formData = new FormData();
         formData.append('file', this.state.file);
@@ -78,7 +83,9 @@ class JobSeekerReport extends React.Component {
 
         const config = {
             headers: {
-                'content-type': 'multipart/form-data'
+                'content-type': 'multipart/form-data',
+                'token': sessionStorage.getItem('token'),
+                'username': sessionStorage.getItem('username')
             }
         };
 
@@ -123,7 +130,6 @@ class JobSeekerReport extends React.Component {
                             </div>
                         </div> :
                         <div>
-                            <input type="button" className="button" value="Report"/>
                             <div>
                                 <ReactDataGrid
                                     columns={columnsjobseeker}

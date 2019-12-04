@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {Redirect} from "react-router";
-import RecruiterHeader from "../recruiter/RecruiterHeader";
 import JobSeekerHeader from "./JobSeekerHeader";
 
 class JobSeeker extends React.Component {

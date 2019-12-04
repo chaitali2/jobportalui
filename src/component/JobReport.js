@@ -5,6 +5,12 @@ import RecruiterJobReport from "./recruiter/RecruiterJobReport";
 import JobSeekerReport from "./jobseeker/JobSeekerReport";
 import JobSeekerHeader from "./jobseeker/JobSeekerHeader";
 
+const config = {
+    headers: {
+        'token': sessionStorage.getItem('token'),
+        'username': sessionStorage.getItem('username')
+    }
+};
 
 class JobReport extends React.Component {
     constructor(props) {
@@ -24,49 +30,34 @@ class JobReport extends React.Component {
 
 
     componentWillMount() {
-        alert(this.state.userType);
         let jobListURL = "";
         if (this.state.userType == 'R') {
-
-            ApiService.getJobDetail(this.state.user_id).then(response => {
-                console.log(response);
-                if (response.data.statusCodeValue == 200) {
-                    this.setState({rows: response.data.body})
-                    this.setState({rowslength: response.data.body.length})
-                } else if (response.data.statusCodeValue == 500) {
-                    alert(response.data.body.errorMessage);
-                    this.setState({error: response.data.body.errorMessage})
-                }
-            }).catch(error => {
-                console.log("error==" + error);
-            })
+            this.loadJobdetail(this.state.user_id);
         } else {
-            ApiService.getJobDetail('').then(response => {
-                console.log(response);
-                if (response.data.statusCodeValue == 200) {
-                    this.setState({rows: response.data.body})
-                    this.setState({rowslength: response.data.body.length})
-                } else if (response.data.statusCodeValue == 500) {
-                    alert(response.data.body.errorMessage);
-                    this.setState({error: response.data.body.errorMessage})
-                }
-            }).catch(error => {
-                console.log("error==" + error);
-            })
+            this.loadJobdetail("");
         }
 
     }
 
+    loadJobdetail(data) {
+        ApiService.getJobDetail(data).then(response => {
+            if (response.status == 200) {
+                this.setState({rows: response.data.body})
+                this.setState({rowslength: response.data.body.length})
+            }
+        }).catch(error => {
+
+        })
+    }
+
 
     render() {
-        alert(this.state.userType);
         if (this.state.userType == 'R') {
             if (this.state.rowslength == 0) {
                 return (
                     <div>
                         <RecruiterHeader/>
                         <div className="maindiv">
-                            <input type="button" className="button" value="Report"/>
                             <h3>No Record Found !!</h3>
                         </div>
                     </div>
@@ -85,7 +76,6 @@ class JobReport extends React.Component {
                     <div>
                         <JobSeekerHeader/>
                         <div className="maindiv">
-                            <input type="button" className="button" value="Report"/>
                             <h3>No Record Found !!</h3>
                         </div>
                     </div>

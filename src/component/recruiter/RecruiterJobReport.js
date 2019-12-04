@@ -3,9 +3,15 @@ import ReactDataGrid from "react-data-grid";
 import RecruiterHeader from "./RecruiterHeader";
 import ApiService from "../service/ApiService";
 
+const config = {
+    headers: {
+        'token': sessionStorage.getItem('token'),
+        'username': sessionStorage.getItem('username')
+    }
+};
 
 const columnsrecruiter = [
-    {key: "id", name: "JOB ID",width:0},
+    {key: "id", name: "JOB ID", width: 0},
     {key: "company", name: "Company"},
     {key: "category_name", name: "Category"},
     {key: "job_type", name: "Type Of Job"},
@@ -23,6 +29,15 @@ const columnsrecruiter = [
     {key: "delete", name: "Delete"}
 ]
 
+const columnsapplyjob = [
+    {key: "firstname", name: "First Name"},
+    {key: "lastname", name: "Last Name"},
+    {key: "company", name: "Company"},
+    {key: "description", name: "Description"},
+    {key: "applyDate", name: "Apply Date"},
+    {key: "fileName", name: "Resume"},
+]
+
 class RecruiterJobReport extends React.Component {
 
 
@@ -31,11 +46,31 @@ class RecruiterJobReport extends React.Component {
         this.state =
             {
                 isView: false,
-                data:""
+                data: "",
+                rows: [],
+                rowslength: 0
             }
         this.getCellActionOnRecruiter = this.getCellActionOnRecruiter.bind(this);
+        this.getCellActionOnResume = this.getCellActionOnResume.bind(this);
 
     };
+
+    getCellActionOnResume(column, row) {
+        const cellActions = {
+            fileName: [{
+                icon: <input type="button" className="button" value="View"/>,
+                callback: () => {
+                    alert("view" + row.fileName);
+                    ApiService.downloadPDF(config).then(response => {
+                        console.log("response==" + response);
+                    }).catch(error => {
+                        console.log("error==" + error);
+                    })
+                }
+            }]
+        };
+        return cellActions[column.key];
+    }
 
     getCellActionOnRecruiter(column, row) {
         const cellActions = {
@@ -45,11 +80,11 @@ class RecruiterJobReport extends React.Component {
                     alert("view")
                     // this.props.history.push('/applyjoblist');
 
-                    ApiService.loadJobsApplied(row.id).then(response => {
+                    ApiService.loadJobsApplied(row.id, config).then(response => {
                         console.log("response==" + response);
                         this.setState({isView: true});
-                        this.setState({data: response.data.body});
-
+                        this.setState({rows: response.data.body})
+                        this.setState({rowslength: response.data.body.length})
 
                     }).catch(error => {
                         console.log("error==" + error);
@@ -92,9 +127,23 @@ class RecruiterJobReport extends React.Component {
             <div>
                 <RecruiterHeader/>
                 <div className="maindiv">
-                    {/*<input type="button" className="button" value="Report" onClick={this.generateReport}/>*/}
-                    {this.state.isView?
-                        <div>{this.state.data}</div>                         :
+                    {this.state.isView ?
+
+                        this.state.rowslength == 0 ? <div>
+                                <div className="maindiv">
+                                    <h3>No Record Found !!</h3>
+                                </div>
+                            </div> :
+                            <div>
+                                <ReactDataGrid
+                                    columns={columnsapplyjob}
+                                    rowGetter={i => this.state.rows[i]}
+                                    rowsCount={this.state.rowslength}
+                                    enableCellSelect={true}
+                                    getCellActions={this.getCellActionOnResume}
+
+                                />
+                            </div> :
                         <div>
                             <ReactDataGrid
                                 columns={columnsrecruiter}

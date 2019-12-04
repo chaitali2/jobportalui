@@ -5,6 +5,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import ApiService from "../service/ApiService";
 import {Redirect} from "react-router";
 
+const config = {
+    headers: {
+        'token': sessionStorage.getItem('token'),
+        'username': sessionStorage.getItem('username')
+    }
+};
+
 class PostJobs extends React.Component {
     constructor(props) {
         super(props);
@@ -40,12 +47,7 @@ class PostJobs extends React.Component {
     };
 
     componentWillMount() {
-        const config = {
-            headers: {
-                'token': sessionStorage.getItem('token'),
-                'username': sessionStorage.getItem('username')
-            }
-        };
+
 
             ApiService.getcategories(config)
                 .then(response => {
@@ -153,7 +155,7 @@ class PostJobs extends React.Component {
         }
 
         if (this.validateForm()) {
-            ApiService.postJobDetail(jobdetail)
+            ApiService.postJobDetail(jobdetail,config)
                 .then(response => {
                     if (response.status == 200) {
                         window.location.reload();
@@ -191,7 +193,7 @@ class PostJobs extends React.Component {
         this.setState({[e.target.name]: e.target.value});
         this.setState({value: e.target.value});
 
-        ApiService.getSkill(e.target.value)
+        ApiService.getSkill(e.target.value,config)
             .then(response => {
                 if (response.status == 200) {
                     this.setState({skillvalue: response.data.body})
@@ -202,9 +204,6 @@ class PostJobs extends React.Component {
     }
 
     render() {
-        if (this.state.isLoggedIn) {
-            return (<Redirect to={'/jobportal/login'}/>);
-        }
         return (
             <div>
                 <RecruiterHeader/>

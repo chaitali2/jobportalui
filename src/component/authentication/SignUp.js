@@ -46,10 +46,7 @@ class SignUp extends React.Component {
 
             ApiService.signup(userdetail)
                 .then(response => {
-                    console.log(response);
-                    console.log("response.status==" + response.status);
                     if (response.status === 200) {
-                        alert(response.data)
                         this.props.history.push('/jobportal/login')
                     }
                 }).catch(error => {

@@ -24,7 +24,8 @@ class RecruiterHeader extends React.Component {
     logout() {
         sessionStorage.setItem("token", "");
         sessionStorage.clear();
-        this.props.history.push('/jobportal/login');
+        this.setState({isLoggedIn:true});
+        // this.props.history.push('/jobportal/login');
     }
 
     render() {
@@ -35,12 +36,12 @@ class RecruiterHeader extends React.Component {
         return (
         <div>
             <div className="header">
-                <label className="label label-primary">JOB Portal</label>
+                <label className="label label-primary"><Link to={"/jobportal/home"}>JOB Portal</Link></label>
                 <label className="label label-primary"> <Link to={"/jobportal/postJobs"}>Post Jobs</Link></label>
                 <label className="label label-primary" > <Link to={"/jobportal/report"}>Job List</Link></label>
-                <label className="label label-primary">Apply Job List</label>
                 <label className="label label-primary"><Link to={"/jobportal/profile"}>Profile</Link></label>
                 <label className="label label-primary">{this.state.username}</label>
+                <label className="label label-primary"><Link to={"/jobportal/change_password"}>Change Password</Link></label>
                 <label className="label label-primary" onClick={this.logout}>Logout</label>
             </div>
         </div>

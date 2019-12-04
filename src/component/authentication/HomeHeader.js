@@ -6,7 +6,7 @@ class HomeHeader extends Component {
         return (
             <div>
                 <div className="header">
-                    <label className="label label-primary"> <Link to={"/welcome"}>JOB PORTAL</Link></label>
+                    <label className="label label-primary"><Link to={"/jobportal/home"}>JOB Portal</Link></label>
                     <label className="label label-primary "> <Link to={"/jobportal/login"}>Login</Link></label>
                     <label className="label label-primary"><Link to={"/jobportal/signup"}>Sign Up</Link></label>
                 </div>

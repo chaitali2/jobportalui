@@ -16,44 +16,52 @@ class ApiService {
         return axios.post(USER_API_BASE_URL + "signup", data)
     }
 
-    postJobDetail(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/addjob_posts", data)
+    postJobDetail(data, config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/addjob_posts", data, config)
     }
 
-    getJobDetail(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/jobDetails", data)
+    getJobDetail(data, config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/jobDetails", data, config)
     }
 
     deleteJobPost(data) {
         return axios.post(USER_API_BASE_URL + "recruiter/removejobpost", data)
     }
 
-    getJobDetailOfCompany(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/jobdetailofcompany", data);
+    getJobDetailOfCompany(data, config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/jobdetailofcompany", data, config);
     }
 
     getcategories(config) {
-        return axios.get(USER_API_BASE_URL + "recruiter/loadCategory",config);
+        return axios.get(USER_API_BASE_URL + "recruiter/loadCategory", config);
     }
 
-    getSkill(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/loadskill",data);
+    getSkill(data, config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/loadskill", data, config);
     }
 
-    applyforjob(data,config) {
-        return axios.post(USER_API_BASE_URL + "recruiter/applyforjob",data,config);
+    applyforjob(data, config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/applyforjob", data, config);
     }
 
-    loadJobsApplied(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/viewJobsApplied",data);
+    loadJobsApplied(data, config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/viewJobsApplied", data, config);
     }
 
-    loadProfileDetails(data,config) {
-        return axios.post(USER_API_BASE_URL + "userdetails",data,config);
+    loadProfileDetails(data, config) {
+        return axios.post(USER_API_BASE_URL + "userdetails", data, config);
     }
 
-    saveProfileDetails(data,config) {
-        return axios.post(USER_API_BASE_URL + "saveProfileDetail",data,config);
+    saveProfileDetails(data, config) {
+        return axios.post(USER_API_BASE_URL + "saveProfileDetail", data, config);
+    }
+
+    downloadPDF(config) {
+        return axios.get(USER_API_BASE_URL + "recruiter/download/pdf", config);
+    }
+
+    updatePassoword(data,config) {
+        return axios.post(USER_API_BASE_URL + "changePassword", data,config);
     }
 
 }

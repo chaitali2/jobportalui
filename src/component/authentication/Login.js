@@ -17,6 +17,21 @@ class Login extends Component {
         this.onChange = this.onChange.bind(this);
     }
 
+
+    componentWillMount() {
+        if (sessionStorage.getItem("token")) {
+            if (sessionStorage.getItem("userType") == 'R') {
+                this.props.history.push('/jobportal/recruiter')
+                window.location.reload();
+            } else if (sessionStorage.getItem("userType") == 'J') {
+                this.props.history.push('/jobportal/jobseeker')
+                window.location.reload();
+            }
+        } else {
+            this.setState({isLoggedIn: true});
+        }
+    }
+
     validateForm() {
         let errors = {};
         let formIsValid = true;
@@ -47,8 +62,6 @@ class Login extends Component {
         if (this.validateForm()) {
             ApiService.fetchByUserName(credential)
                 .then(response => {
-                    alert("response.status==" + response.status);
-
                     if (response.status == 200) {
                         let userdata = response.data.body;
                         sessionStorage.setItem('username', response.data.body.username);
