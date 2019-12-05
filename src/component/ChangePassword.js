@@ -70,15 +70,15 @@ class ChangePassword extends Component {
 
                     <form onSubmit={(event) => this.changePassword(event)}>
                         <label>Old Password :</label>
-                        <input type="text" name="old_password"
+                        <input type="password" name="old_password"
                                onChange={this.handleChange}/>
 
                         <label>New Password :</label>
-                        <input type="text" name="new_password"
+                        <input type="password" name="new_password"
                                onChange={this.handleChange}/>
 
                         <label>Confirm Password :</label>
-                        <input type="text" name="confirm_password"
+                        <input type="password" name="confirm_password"
                                onChange={this.handleChange}/>
 
                         <input type="submit" className="button" value="submit"/>
