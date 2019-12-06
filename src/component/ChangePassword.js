@@ -82,7 +82,6 @@ class ChangePassword extends Component {
                                onChange={this.handleChange}/>
 
                         <input type="submit" className="button" value="submit"/>
-
                     </form>
 
                 </div>

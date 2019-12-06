@@ -45,14 +45,16 @@ class JobSeekerReport extends React.Component {
             apply: [{
                 icon: <input type="button" className="button" value="Apply Job"/>,
                 callback: () => {
-                    alert("apply")
                     const config = {
                         headers: {
                             'token': sessionStorage.getItem('token'),
                             'username': sessionStorage.getItem('username')
                         }
                     };
-                    ApiService.getJobDetailOfCompany(row.id,config).then(response => {
+                    const job_id = {
+                        "job_id": row.id
+                    }
+                    ApiService.getJobDetailOfCompany(job_id,config).then(response => {
                         console.log("response==" + response);
                         this.setState({jobdesc: response.data.body});
                         this.setState({isApplyJob: true});
@@ -90,11 +92,13 @@ class JobSeekerReport extends React.Component {
         };
 
         ApiService.applyforjob(formData, config).then(response => {
-            if (response.data.statusCodeValue == 200) {
-            } else if (response.data.statusCodeValue == 500) {
-                alert(response.data.body.errorMessage);
-            }
-            window.location.reload();
+            alert(response.status);
+            alert(response.data);
+            // if (response.data.statusCodeValue == 200) {
+            // } else if (response.data.statusCodeValue == 500) {
+            //     alert(response.data.body.errorMessage);
+            // }
+            // window.location.reload();
 
         }).catch(error => {
             console.log("error==" + error);

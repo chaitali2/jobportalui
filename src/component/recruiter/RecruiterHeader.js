@@ -39,7 +39,7 @@ class RecruiterHeader extends React.Component {
         <div>
             <div className="header">
                 <label className="label label-primary"><Link to={"/jobportal/home"}>JOB Portal</Link></label>
-                <label className="label label-primary"> <Link to={"/jobportal/postJobs"} onClick={this.refresh}>Post Jobs</Link></label>
+                <label className="label label-primary"> <Link to={"/jobportal/postJobs"}>Post Jobs</Link></label>
                 <label className="label label-primary" > <Link to={"/jobportal/report"}>Job List</Link></label>
                 <label className="label label-primary"><Link to={"/jobportal/profile"}>Profile</Link></label>
                 <label className="label label-primary">{this.state.username}</label>

@@ -62,7 +62,13 @@ class RecruiterJobReport extends React.Component {
                 callback: () => {
                     alert("view" + row.fileName);
                     ApiService.downloadPDF(config).then(response => {
-                        console.log("response==" + response);
+                        console.log("response==" + response.data);
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'file.pdf'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
                     }).catch(error => {
                         console.log("error==" + error);
                     })
@@ -79,8 +85,10 @@ class RecruiterJobReport extends React.Component {
                 callback: () => {
                     alert("view")
                     // this.props.history.push('/applyjoblist');
-
-                    ApiService.loadJobsApplied(row.id, config).then(response => {
+                    const job_id = {
+                        "job_id": row.id
+                    }
+                    ApiService.loadJobsApplied(job_id, config).then(response => {
                         console.log("response==" + response);
                         this.setState({isView: true});
                         this.setState({rows: response.data.body})
@@ -102,7 +110,10 @@ class RecruiterJobReport extends React.Component {
                 icon: <input type="button" className="button" value="Delete"/>,
                 callback: () => {
                     alert("delete");
-                    ApiService.deleteJobPost(row.id)
+                    const job_id = {
+                        "job_id": row.id
+                    }
+                    ApiService.deleteJobPost(job_id)
                         .then(response => {
                             console.log("response==" + response);
 

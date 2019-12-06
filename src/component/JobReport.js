@@ -32,9 +32,12 @@ class JobReport extends React.Component {
     componentWillMount() {
         let jobListURL = "";
         if (this.state.userType == 'R') {
-            this.loadJobdetail(this.state.user_id);
+            const user_id = {
+                "user_id": this.state.user_id
+            }
+            this.loadJobdetail(user_id);
         } else {
-            this.loadJobdetail("");
+            this.loadJobdetail();
         }
 
     }

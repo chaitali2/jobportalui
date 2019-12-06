@@ -79,10 +79,10 @@ class PostJobs extends React.Component {
             errors["company"] = "*Please enter your company.";
         }
 
-        if (this.state.skills.length<1) {
-            formIsValid = false;
-            errors["skills"] = "*Please select skills";
-        }
+        // if (this.state.skills.length<1) {
+        //     formIsValid = false;
+        //     errors["skills"] = "*Please select skills";
+        // }
 
         if (!this.state.job_type) {
             formIsValid = false;
@@ -192,8 +192,10 @@ class PostJobs extends React.Component {
     loadSkill(e) {
         this.setState({[e.target.name]: e.target.value});
         this.setState({value: e.target.value});
-
-        ApiService.getSkill(e.target.value,config)
+        const category = {
+            "category_id": e.target.value
+        }
+        ApiService.getSkill(category,config)
             .then(response => {
                 if (response.status == 200) {
                     this.setState({skillvalue: response.data.body})

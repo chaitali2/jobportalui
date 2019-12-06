@@ -37,7 +37,10 @@ class Profile extends Component {
     }
 
     profile() {
-        ApiService.loadProfileDetails(this.state.userID, config).then(response => {
+        const user_id = {
+            "user_id": this.state.userID
+        }
+        ApiService.loadProfileDetails(user_id, config).then(response => {
             this.setState({userdetails: response.data.body})
             this.setState({firstname: response.data.body.firstname})
             this.setState({lastname: response.data.body.lastname})
@@ -48,7 +51,6 @@ class Profile extends Component {
     }
 
     saveProfileDetail() {
-
         const userdetail = {
             "firstname": this.state.firstname,
             "lastname": this.state.lastname,
@@ -64,15 +66,60 @@ class Profile extends Component {
             "userID": sessionStorage.getItem("id")
         }
 
-        ApiService.saveProfileDetails(userdetail, config).then(response => {
-            this.setState({userdetails: response.data.body})
-        }).catch(error => {
-            console.log(error);
-        })
+        if (this.validateForm()) {
+            ApiService.saveProfileDetails(userdetail, config).then(response => {
+                this.setState({userdetails: response.data.body})
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
+    }
+
+
+    validateForm() {
+        let errors = {};
+        let formIsValid = true;
+
+        if (!this.state.firstname) {
+            formIsValid = false;
+            errors["firstname"] = "*Please enter your First Name.";
+        }
+
+        if (!this.state.firstname.match(/^[a-zA-Z ]*$/)) {
+            formIsValid = false;
+            errors["firstname"] = "*Please enter alphabet characters only.";
+        }
+
+        if (!this.state.lastname) {
+            formIsValid = false;
+            errors["lastname"] = "*Please enter your Last Name.";
+        }
+
+        if (!this.state.lastname.match(/^[a-zA-Z ]*$/)) {
+            formIsValid = false;
+            errors["lastname"] = "*Please enter alphabet characters only.";
+        }
+
+        if (!this.state.mobno) {
+            formIsValid = false;
+            errors["mobno"] = "*Please enter valid mobile no.";
+        }
+
+        if (!this.state.mobno.match(/^[0-9]{10}$/)) {
+            formIsValid = false;
+            errors["mobno"] = "*Please enter valid mobile no.";
+        }
+
+        this.setState({
+            errors: errors
+        });
+
+        return formIsValid;
+
     }
 
     render() {
@@ -133,6 +180,10 @@ class Profile extends Component {
 
                             <label>Mobile No :</label>
                             <input type="text" name="mobno" value={this.state.userdetails.mobno}
+                                   onChange={this.handleChange}/>
+
+                            <label>Street Address :</label>
+                            <input type="text" name="street_add" value={this.state.userdetails.street_add}
                                    onChange={this.handleChange}/>
 
                             <label>City :</label>
