@@ -45,13 +45,11 @@ class ChangePassword extends Component {
                     window.location.reload();
                 }
             }).catch(error => {
-
             if (error.response.status == 400) {
-                if (error.response.data.errorMessage) {
-                    alert(error.response.data.errorMessage);
-                } else {
-                    alert(error.response.data);
-                }
+                alert(error.response.data.errorMessage);
+            }
+            if (error.response.status == 500) {
+                alert(error.response.data.errorMessage);
             }
         })
     }

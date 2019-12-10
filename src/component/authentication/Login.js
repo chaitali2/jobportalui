@@ -65,6 +65,7 @@ class Login extends Component {
                     if (response.status == 200) {
                         let userdata = response.data.body;
                         sessionStorage.setItem('username', response.data.body.username);
+                        sessionStorage.setItem('fullname', response.data.body.firstname +" "+response.data.body.lastname);
                         sessionStorage.setItem('id', response.data.body.id);
                         sessionStorage.setItem('token', response.data.body.token);
                         sessionStorage.setItem('userType', response.data.body.usertype);

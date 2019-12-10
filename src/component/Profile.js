@@ -68,9 +68,16 @@ class Profile extends Component {
 
         if (this.validateForm()) {
             ApiService.saveProfileDetails(userdetail, config).then(response => {
-                this.setState({userdetails: response.data.body})
+                if (response.status == 200) {
+                    this.setState({userdetails: response.data.body})
+                }
             }).catch(error => {
-                console.log(error);
+                if (error.response.status == 400) {
+                    alert(error.response.data.errorMessage);
+                }
+                if (error.response.status == 500) {
+                    alert(error.response.data.errorMessage);
+                }
             })
         }
     }

@@ -19,7 +19,7 @@ class PostJobs extends React.Component {
             categories: [],
             skillvalue: [],
 
-            category_id:0,
+            category_id: 0,
             company: '',
             skills: [],
             job_type: '',
@@ -49,17 +49,17 @@ class PostJobs extends React.Component {
     componentWillMount() {
 
 
-            ApiService.getcategories(config)
-                .then(response => {
-                    console.log(response);
-                    if (response.data.statusCodeValue == 200) {
-                        this.setState({categories: response.data.body})
-                    }
+        ApiService.getcategories(config)
+            .then(response => {
+                console.log(response);
+                if (response.data.statusCodeValue == 200) {
+                    this.setState({categories: response.data.body})
+                }
 
-                }).catch(error => {
-                console.log(error);
-                this.props.history.push('/login')
-            })
+            }).catch(error => {
+            console.log(error);
+            this.props.history.push('/login')
+        })
 
 
     }
@@ -155,13 +155,22 @@ class PostJobs extends React.Component {
         }
 
         if (this.validateForm()) {
-            ApiService.postJobDetail(jobdetail,config)
+            ApiService.postJobDetail(jobdetail, config)
                 .then(response => {
                     if (response.status == 200) {
                         window.location.reload();
                     }
                 }).catch(error => {
-                alert(error);
+                if (error.response.status == 400) {
+                    if(error.response.data.errorMessage){
+                        alert(error.response.data.errorMessage);
+                    }else{
+                        alert(error.response.data);
+                    }
+                }
+                if (error.response.status == 500) {
+                    alert(error.response.data.errorMessage);
+                }
             })
         }
     }
@@ -195,13 +204,18 @@ class PostJobs extends React.Component {
         const category = {
             "category_id": e.target.value
         }
-        ApiService.getSkill(category,config)
+        ApiService.getSkill(category, config)
             .then(response => {
                 if (response.status == 200) {
                     this.setState({skillvalue: response.data.body})
                 }
             }).catch(error => {
-            alert("error" + error);
+            if (error.response.status == 400) {
+                alert(error.response.data.errorMessage);
+            }
+            if (error.response.status == 500) {
+                alert(error.response.data.errorMessage);
+            }
         })
     }
 

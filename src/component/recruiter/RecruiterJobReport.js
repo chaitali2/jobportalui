@@ -62,16 +62,21 @@ class RecruiterJobReport extends React.Component {
                     const filename = {
                         "filename": row.fileName
                     }
-                    ApiService.downloadPDF(filename,config).then(response => {
+                    ApiService.downloadPDF(filename, config).then(response => {
                         console.log("response==" + response.data);
                         const url = window.URL.createObjectURL(new Blob([response.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', row.fileName+'.pdf'); //or any other extension
+                        link.setAttribute('download', row.fileName + '.pdf'); //or any other extension
                         document.body.appendChild(link);
                         link.click();
                     }).catch(error => {
-                        console.log("error==" + error);
+                        if (error.response.status == 400) {
+                            alert(error.response.data.errorMessage);
+                        }
+                        if (error.response.status == 500) {
+                            alert(error.response.data.errorMessage);
+                        }
                     })
                 }
             }]
@@ -85,18 +90,21 @@ class RecruiterJobReport extends React.Component {
                 icon: <input type="button" className="button" value="View"/>,
                 callback: () => {
                     alert("view")
-                    // this.props.history.push('/applyjoblist');
                     const job_id = {
                         "job_id": row.id
                     }
                     ApiService.loadJobsApplied(job_id, config).then(response => {
-                        console.log("response==" + response);
                         this.setState({isView: true});
                         this.setState({rows: response.data.body})
                         this.setState({rowslength: response.data.body.length})
 
                     }).catch(error => {
-                        console.log("error==" + error);
+                        if (error.response.status == 400) {
+                            alert(error.response.data.errorMessage);
+                        }
+                        if (error.response.status == 500) {
+                            alert(error.response.data.errorMessage);
+                        }
                     })
                 }
             }
@@ -107,19 +115,15 @@ class RecruiterJobReport extends React.Component {
                     const job_id = {
                         "job_id": row.id
                     }
-                    ApiService.deleteJobPost(job_id,config)
+                    ApiService.deleteJobPost(job_id, config)
                         .then(response => {
-                            console.log("response==" + response);
-
-                            if (response.data.statusCodeValue == 200) {
-                                alert(response.data.body);
-                                window.location.reload();
-                            } else if (response.data.statusCodeValue == 500) {
-                                alert(response.data.body.errorMessage);
-                            }
-
                         }).catch(error => {
-                        console.log("error==" + error);
+                        if (error.response.status == 400) {
+                            alert(error.response.data.errorMessage);
+                        }
+                        if (error.response.status == 500) {
+                            alert(error.response.data.errorMessage);
+                        }
                     })
                 }
             }]

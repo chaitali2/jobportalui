@@ -24,7 +24,8 @@ class JobReport extends React.Component {
             rowslength: 0,
             job_id: '',
             file: null,
-            jobstatus: false
+            jobstatus: false,
+            isView: false
         }
     };
 
@@ -42,6 +43,10 @@ class JobReport extends React.Component {
 
     }
 
+    componentDidMount() {
+        this.setState({isView: false})
+    }
+
     loadJobdetail(data) {
         ApiService.getJobDetail(data, config).then(response => {
             if (response.status == 200) {
@@ -49,7 +54,12 @@ class JobReport extends React.Component {
                 this.setState({rowslength: response.data.body.length})
             }
         }).catch(error => {
-            console.log("error==" + error)
+            if (error.response.status == 400) {
+                alert(error.response.data.errorMessage);
+            }
+            if (error.response.status == 500) {
+                alert(error.response.data.errorMessage);
+            }
         })
     }
 

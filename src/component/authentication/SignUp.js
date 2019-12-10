@@ -43,22 +43,21 @@ class SignUp extends React.Component {
         }
 
         if (this.validateForm()) {
-
             ApiService.signup(userdetail)
                 .then(response => {
                     if (response.status === 200) {
                         this.props.history.push('/jobportal/login')
                     }
                 }).catch(error => {
-
-                alert(error.response.status);
-
                 if (error.response.status == 400) {
                     if (error.response.data.errorMessage) {
                         alert(error.response.data.errorMessage);
                     } else {
                         alert(error.response.data);
                     }
+                }
+                if (error.response.status == 500) {
+                    alert(error.response.data.errorMessage);
                 }
             })
         }

@@ -8,6 +8,8 @@ class RecruiterHeader extends React.Component {
         this.state = {
             isLoggedIn: false,
             username: sessionStorage.getItem("username"),
+            fullname: sessionStorage.getItem("fullname")
+
         };
 
         this.logout = this.logout.bind(this);
@@ -40,9 +42,9 @@ class RecruiterHeader extends React.Component {
             <div className="header">
                 <label className="label label-primary"><Link to={"/jobportal/home"}>JOB Portal</Link></label>
                 <label className="label label-primary"> <Link to={"/jobportal/postJobs"}>Post Jobs</Link></label>
-                <label className="label label-primary" > <Link to={"/jobportal/report"}>Job List</Link></label>
+                <label className="label label-primary" > <Link to={"/jobportal/report"} >Job List</Link></label>
                 <label className="label label-primary"><Link to={"/jobportal/profile"}>Profile</Link></label>
-                <label className="label label-primary">{this.state.username}</label>
+                <label className="label label-primary">{this.state.fullname}</label>
                 <label className="label label-primary"><Link to={"/jobportal/change_password"}>Change Password</Link></label>
                 <label className="label label-primary" onClick={this.logout}>Logout</label>
             </div>
