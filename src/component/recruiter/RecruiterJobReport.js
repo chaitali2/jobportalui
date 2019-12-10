@@ -25,7 +25,6 @@ const columnsrecruiter = [
     {key: "description", name: "Description"},
     {key: "skills", name: "Skills"},
     {key: "view", name: "View"},
-    {key: "update", name: "Update"},
     {key: "delete", name: "Delete"}
 ]
 
@@ -60,13 +59,15 @@ class RecruiterJobReport extends React.Component {
             fileName: [{
                 icon: <input type="button" className="button" value="View"/>,
                 callback: () => {
-                    alert("view" + row.fileName);
-                    ApiService.downloadPDF(config).then(response => {
+                    const filename = {
+                        "filename": row.fileName
+                    }
+                    ApiService.downloadPDF(filename,config).then(response => {
                         console.log("response==" + response.data);
                         const url = window.URL.createObjectURL(new Blob([response.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', 'file.pdf'); //or any other extension
+                        link.setAttribute('download', row.fileName+'.pdf'); //or any other extension
                         document.body.appendChild(link);
                         link.click();
                     }).catch(error => {
@@ -99,21 +100,14 @@ class RecruiterJobReport extends React.Component {
                     })
                 }
             }
-            ], update: [{
-                icon: <input type="button" className="button" value="Update"/>,
-                callback: () => {
-                    alert("updated")
-                }
-            }
             ],
             delete: [{
                 icon: <input type="button" className="button" value="Delete"/>,
                 callback: () => {
-                    alert("delete");
                     const job_id = {
                         "job_id": row.id
                     }
-                    ApiService.deleteJobPost(job_id)
+                    ApiService.deleteJobPost(job_id,config)
                         .then(response => {
                             console.log("response==" + response);
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const USER_API_BASE_URL = 'http://10.234.4.106:8080/api/jobportal/';
+const USER_API_BASE_URL = 'http://192.168.1.14:8090/api/jobportal/';
 
 class ApiService {
 
@@ -21,15 +21,15 @@ class ApiService {
     }
 
     getJobDetail(data, config) {
-        return axios.post(USER_API_BASE_URL + "recruiter/jobDetails", data, config)
+        return axios.post(USER_API_BASE_URL + "jobDetails", data, config)
     }
 
-    deleteJobPost(data) {
-        return axios.post(USER_API_BASE_URL + "recruiter/removejobpost", data)
+    deleteJobPost(data,config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/removejobpost", data,config)
     }
 
     getJobDetailOfCompany(data, config) {
-        return axios.post(USER_API_BASE_URL + "recruiter/jobdetailofcompany", data, config);
+        return axios.post(USER_API_BASE_URL + "jobseeker/jobdetailofcompany", data, config);
     }
 
     getcategories(config) {
@@ -41,7 +41,7 @@ class ApiService {
     }
 
     applyforjob(data, config) {
-        return axios.post(USER_API_BASE_URL + "recruiter/applyforjob", data, config);
+        return axios.post(USER_API_BASE_URL + "jobseeker/applyforjob", data, config);
     }
 
     loadJobsApplied(data, config) {
@@ -56,8 +56,8 @@ class ApiService {
         return axios.post(USER_API_BASE_URL + "saveProfileDetail", data, config);
     }
 
-    downloadPDF(config) {
-        return axios.get(USER_API_BASE_URL + "recruiter/download/pdf", config);
+    downloadPDF(data,config) {
+        return axios.post(USER_API_BASE_URL + "recruiter/download/pdf",data, config);
     }
 
     updatePassoword(data,config) {

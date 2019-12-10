@@ -43,13 +43,13 @@ class JobReport extends React.Component {
     }
 
     loadJobdetail(data) {
-        ApiService.getJobDetail(data).then(response => {
+        ApiService.getJobDetail(data, config).then(response => {
             if (response.status == 200) {
                 this.setState({rows: response.data.body})
                 this.setState({rowslength: response.data.body.length})
             }
         }).catch(error => {
-
+            console.log("error==" + error)
         })
     }
 

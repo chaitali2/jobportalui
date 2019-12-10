@@ -20,7 +20,7 @@ class Home extends Component {
             return (
                 <div>
                     <RecruiterHeader/>
-                    <div>Welcome to Job Portal Management</div>
+                    <div className="title"><h3><center>Welcome to Job Portal Management</center></h3></div>
                 </div>
             );
 
@@ -28,14 +28,14 @@ class Home extends Component {
             return (
                 <div>
                     <JobSeekerHeader/>
-                    <div>Welcome to Job Portal Management</div>
+                    <div className="title"><h3><center>Welcome to Job Portal Management</center></h3></div>
                 </div>
             );
         } else {
             return (
                 <div>
                     <HomeHeader/>
-                    <div>Welcome to Job Portal Management</div>
+                    <div className="title"><h3><center>Welcome to Job Portal Management</center></h3></div>
                 </div>
             );
         }

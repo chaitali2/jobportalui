@@ -16,7 +16,7 @@ const App = () => (
     <Router>
         <div >
             <Route path="/jobportal/profile" component={Profile} />
-            <Route path="/jobportal/report" component={JobReport} />
+            <Route path="/jobportal/report" exact component={JobReport} />
             <Route path="/jobportal/postJobs" component={PostJobs} />
             <Route path="/jobportal/home" component={Home} />
             <Route path="/jobportal/login" component={Login} />

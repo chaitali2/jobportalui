@@ -81,7 +81,6 @@ class Login extends Component {
 
                 })
                 .catch(error => {
-                    alert(error.response.status);
                     if (error.response.status == 400) {
                         alert(error.response.data.errorMessage);
                     }

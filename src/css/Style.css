@@ -16,6 +16,9 @@
     padding: 0px 15px 15px 15px;
 }
 
+.title{
+    margin-top:250px;
+}
 
 label,input,select {
     display: block;
