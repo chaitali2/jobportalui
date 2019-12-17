@@ -211,7 +211,7 @@ class SignUp extends React.Component {
                         <input type="submit" className="button" value="Register"/>
 
                     </form>
-                    <Link to={"/login"}>Login</Link>
+                    <Link to={"/jobportal/login"}>Login</Link>
 
                 </div>
             </div>

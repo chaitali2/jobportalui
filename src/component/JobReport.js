@@ -55,7 +55,11 @@ class JobReport extends React.Component {
             }
         }).catch(error => {
             if (error.response.status == 400) {
-                alert(error.response.data.errorMessage);
+                if (error.response.data.errorMessage) {
+                    alert(error.response.data.errorMessage);
+                } else {
+                    alert(error.response.data);
+                }
             }
             if (error.response.status == 500) {
                 alert(error.response.data.errorMessage);

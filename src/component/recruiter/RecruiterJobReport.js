@@ -11,7 +11,7 @@ const config = {
 };
 
 const columnsrecruiter = [
-    {key: "id", name: "JOB ID", width: 0},
+    {key: "jobId", name: "JOB ID", width: 0},
     {key: "company", name: "Company"},
     {key: "category_name", name: "Category"},
     {key: "job_type", name: "Type Of Job"},
@@ -72,7 +72,11 @@ class RecruiterJobReport extends React.Component {
                         link.click();
                     }).catch(error => {
                         if (error.response.status == 400) {
-                            alert(error.response.data.errorMessage);
+                            if (error.response.data.errorMessage) {
+                                alert(error.response.data.errorMessage);
+                            } else {
+                                alert(error.response.data);
+                            }
                         }
                         if (error.response.status == 500) {
                             alert(error.response.data.errorMessage);
@@ -89,9 +93,8 @@ class RecruiterJobReport extends React.Component {
             view: [{
                 icon: <input type="button" className="button" value="View"/>,
                 callback: () => {
-                    alert("view")
                     const job_id = {
-                        "job_id": row.id
+                        "job_id": row.jobId
                     }
                     ApiService.loadJobsApplied(job_id, config).then(response => {
                         this.setState({isView: true});
@@ -113,7 +116,7 @@ class RecruiterJobReport extends React.Component {
                 icon: <input type="button" className="button" value="Delete"/>,
                 callback: () => {
                     const job_id = {
-                        "job_id": row.id
+                        "job_id": row.jobId
                     }
                     ApiService.deleteJobPost(job_id, config)
                         .then(response => {

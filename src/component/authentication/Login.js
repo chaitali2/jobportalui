@@ -65,7 +65,7 @@ class Login extends Component {
                     if (response.status == 200) {
                         let userdata = response.data.body;
                         sessionStorage.setItem('username', response.data.body.username);
-                        sessionStorage.setItem('fullname', response.data.body.firstname +" "+response.data.body.lastname);
+                        sessionStorage.setItem('fullname', response.data.body.firstname + " " + response.data.body.lastname);
                         sessionStorage.setItem('id', response.data.body.id);
                         sessionStorage.setItem('token', response.data.body.token);
                         sessionStorage.setItem('userType', response.data.body.usertype);
@@ -83,7 +83,11 @@ class Login extends Component {
                 })
                 .catch(error => {
                     if (error.response.status == 400) {
-                        alert(error.response.data.errorMessage);
+                        if (error.response.data.errorMessage) {
+                            alert(error.response.data.errorMessage);
+                        } else {
+                            alert(error.response.data);
+                        }
                     }
                     if (error.response.status == 500) {
                         alert(error.response.data.errorMessage);
@@ -116,7 +120,7 @@ class Login extends Component {
 
                         <input type="submit" value="Login"/>
                     </form>
-                    <Link activeStyle={{color: 'green'}} to={"/registration"}>Registrartion</Link>
+                    <Link activeStyle={{color: 'green'}} to={"/jobportal/signup"}>Registrartion</Link>
                 </div>
             </div>
         );

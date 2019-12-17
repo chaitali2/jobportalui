@@ -5,7 +5,7 @@ import ApiService from "../service/ApiService";
 
 
 const columnsjobseeker = [
-    {key: "id", name: "JOB ID", width: 0},
+    {key: "jobId", name: "JOB ID", width: 0},
     {key: "company", name: "Company", width: 150},
     {key: "category_name", name: "Category"},
     {key: "job_type", name: "Job Type"},
@@ -52,16 +52,25 @@ class JobSeekerReport extends React.Component {
                         }
                     };
                     const job_id = {
-                        "job_id": row.id
+                        "job_id": row.jobId
                     }
                     ApiService.getJobDetailOfCompany(job_id, config).then(response => {
                         console.log("response==" + response);
                         this.setState({jobdesc: response.data.body});
                         this.setState({isApplyJob: true});
-                        this.setState({job_id: response.data.body.id});
+                        this.setState({job_id: response.data.body.jobId});
 
                     }).catch(error => {
-                        console.log("error==" + error);
+                        if (error.response.status == 400) {
+                            if (error.response.data.errorMessage) {
+                                alert(error.response.data.errorMessage);
+                            } else {
+                                alert(error.response.data);
+                            }
+                        }
+                        if (error.response.status == 500) {
+                            alert(error.response.data.errorMessage);
+                        }
                     })
                 }
             }
@@ -96,7 +105,11 @@ class JobSeekerReport extends React.Component {
             }
         }).catch(error => {
             if (error.response.status == 400) {
-                alert(error.response.data.errorMessage);
+                if (error.response.data.errorMessage) {
+                    alert(error.response.data.errorMessage);
+                } else {
+                    alert(error.response.data);
+                }
             }
             if (error.response.status == 500) {
                 alert(error.response.data.errorMessage);

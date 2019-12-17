@@ -45,6 +45,13 @@ class Profile extends Component {
             this.setState({firstname: response.data.body.firstname})
             this.setState({lastname: response.data.body.lastname})
             this.setState({mobno: response.data.body.mobno})
+            this.setState({street_add: response.data.body.street_add})
+            this.setState({city: response.data.body.city})
+            this.setState({state: response.data.body.state})
+            this.setState({experience: response.data.body.experience})
+            this.setState({highest_degree: response.data.body.highest_degree})
+            this.setState({passing_year: response.data.body.passing_year})
+            this.setState({expected_salary: response.data.body.expected_salary})
         }).catch(error => {
             console.log(error);
         })
@@ -73,7 +80,11 @@ class Profile extends Component {
                 }
             }).catch(error => {
                 if (error.response.status == 400) {
-                    alert(error.response.data.errorMessage);
+                    if (error.response.data.errorMessage) {
+                        alert(error.response.data.errorMessage);
+                    } else {
+                        alert(error.response.data);
+                    }
                 }
                 if (error.response.status == 500) {
                     alert(error.response.data.errorMessage);
