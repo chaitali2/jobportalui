@@ -3,7 +3,6 @@ import RecruiterHeader from "./RecruiterHeader";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ApiService from "../service/ApiService";
-import {Redirect} from "react-router";
 
 const config = {
     headers: {
@@ -19,20 +18,20 @@ class PostJobs extends React.Component {
             categories: [],
             skillvalue: [],
 
-            category_id: 0,
+            categoryId: 0,
             company: '',
             skills: [],
-            job_type: '',
+            jobType: '',
             experience: 0.0,
-            salary_offer: 0,
-            street_add: '',
+            salaryOffer: 0,
+            street: '',
             city: '',
             state: '',
             pincode: 0,
             description: '',
-            job_opening_date: new Date(),
+            jobOpeningDate: new Date(),
 
-            posted_by_id: sessionStorage.getItem("id"),
+            postedById: sessionStorage.getItem("id"),
             value: "select",
             out: "",
             errors: {}
@@ -68,7 +67,7 @@ class PostJobs extends React.Component {
         let errors = {};
         let formIsValid = true;
 
-        if (!this.state.category_id) {
+        if (!this.state.categoryId) {
             formIsValid = false;
             errors["category"] = "*Please select category";
         }
@@ -84,9 +83,9 @@ class PostJobs extends React.Component {
         //     errors["skills"] = "*Please select skills";
         // }
 
-        if (!this.state.job_type) {
+        if (!this.state.jobType) {
             formIsValid = false;
-            errors["job_type"] = "*Please select type of job";
+            errors["jobType"] = "*Please select type of job";
         }
 
         if (!this.state.experience) {
@@ -94,14 +93,14 @@ class PostJobs extends React.Component {
             errors["experience"] = "*Please enter your experience";
         }
 
-        if (!this.state.salary_offer) {
+        if (!this.state.salaryOffer) {
             formIsValid = false;
-            errors["salary_offer"] = "*Please enter offered salary";
+            errors["salaryOffer"] = "*Please enter offered salary";
         }
 
-        if (!this.state.street_add) {
+        if (!this.state.street) {
             formIsValid = false;
-            errors["street_add"] = "*Please enter street address";
+            errors["street"] = "*Please enter street address";
         }
 
         if (!this.state.city) {
@@ -124,9 +123,9 @@ class PostJobs extends React.Component {
             errors["description"] = "*Please enter Description";
         }
 
-        if (!this.state.job_opening_date) {
+        if (!this.state.jobOpeningDate) {
             formIsValid = false;
-            errors["job_opening_date"] = "*Please select job opening date";
+            errors["jobOpeningDate"] = "*Please select job opening date";
         }
 
 
@@ -139,19 +138,19 @@ class PostJobs extends React.Component {
 
     savePostedJobDetail() {
         const jobdetail = {
-            "category_id": this.state.category_id,
+            "categoryId": this.state.categoryId,
             "company": this.state.company,
             "skills": this.state.skills,
-            "job_type": this.state.job_type,
+            "jobType": this.state.jobType,
             "experience": this.state.experience,
-            "salary_offer": this.state.salary_offer,
-            "street_add": this.state.street_add,
+            "salaryOffer": this.state.salaryOffer,
+            "street": this.state.street,
             "city": this.state.city,
             "state": this.state.state,
             "pincode": this.state.pincode,
             "description": this.state.description,
-            "posted_by_id": this.state.posted_by_id,
-            "job_opening_date": this.state.job_opening_date
+            "postedById": this.state.postedById,
+            "jobOpeningDate": this.state.jobOpeningDate
         }
 
         if (this.validateForm()) {
@@ -189,7 +188,7 @@ class PostJobs extends React.Component {
 
     handleChangedate = date => {
         this.setState({
-            job_opening_date: date
+            jobOpeningDate: date
         });
     };
 
@@ -202,7 +201,7 @@ class PostJobs extends React.Component {
         this.setState({[e.target.name]: e.target.value});
         this.setState({value: e.target.value});
         const category = {
-            "category_id": e.target.value
+            "categoryId": e.target.value
         }
         ApiService.getSkill(category, config)
             .then(response => {
@@ -232,10 +231,10 @@ class PostJobs extends React.Component {
                         <span style={{color: "red"}}>{this.state.errors["company"]}</span>
 
                         <label>Category :</label>
-                        <select name="category_id" onChange={this.loadSkill}>
+                        <select name="categoryId" onChange={this.loadSkill}>
                             <option value="">Select Category</option>
-                            {this.state.categories.map(o => <option key={o.category_id}
-                                                                    value={o.category_id}>{o.categoryName}</option>)}
+                            {this.state.categories.map(o => <option key={o.categoryId}
+                                                                    value={o.categoryId}>{o.categoryName}</option>)}
                         </select>
                         <span style={{color: "red"}}>{this.state.errors["category"]}</span>
 
@@ -248,12 +247,12 @@ class PostJobs extends React.Component {
 
 
                         <label>Job Type :</label>
-                        <select name="job_type" onChange={this.handleChange}>
+                        <select name="jobType" onChange={this.handleChange}>
                             <option value="">Select Job Type</option>
                             <option value="P">Permanent</option>
                             <option value="C">Contract</option>
                         </select>
-                        <span style={{color: "red"}}>{this.state.errors["job_type"]}</span>
+                        <span style={{color: "red"}}>{this.state.errors["jobType"]}</span>
 
 
                         <label>Experience :</label>
@@ -262,13 +261,13 @@ class PostJobs extends React.Component {
 
 
                         <label> Offer Salary :</label>
-                        <input type="text" name="salary_offer" placeholder="LPA" onChange={this.handleChange}/>
-                        <span style={{color: "red"}}>{this.state.errors["salary_offer"]}</span>
+                        <input type="text" name="salaryOffer" placeholder="LPA" onChange={this.handleChange}/>
+                        <span style={{color: "red"}}>{this.state.errors["salaryOffer"]}</span>
 
 
                         <label>Street Address :</label>
-                        <input type="text" name="street_add" onChange={this.handleChange}/>
-                        <span style={{color: "red"}}>{this.state.errors["street_add"]}</span>
+                        <input type="text" name="street" onChange={this.handleChange}/>
+                        <span style={{color: "red"}}>{this.state.errors["street"]}</span>
 
 
                         <label>City :</label>
@@ -288,12 +287,12 @@ class PostJobs extends React.Component {
 
                         <label>Job Opening Date :</label>
                         <DatePicker
-                            selected={this.state.job_opening_date}
+                            selected={this.state.jobOpeningDate}
                             onChange={this.handleChangedate}
                             dateFormat="dd-MM-yyyy"
 
                         />
-                        <span style={{color: "red"}}>{this.state.errors["job_opening_date"]}</span>
+                        <span style={{color: "red"}}>{this.state.errors["jobOpeningDate"]}</span>
 
 
                         <label>Description :</label>

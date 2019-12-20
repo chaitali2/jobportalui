@@ -7,15 +7,15 @@ import ApiService from "../service/ApiService";
 const columnsjobseeker = [
     {key: "jobId", name: "JOB ID", width: 0},
     {key: "company", name: "Company", width: 150},
-    {key: "category_name", name: "Category"},
-    {key: "job_type", name: "Job Type"},
+    {key: "categoryName", name: "Category"},
+    {key: "jobType", name: "Job Type"},
     {key: "experience", name: "Experience"},
-    {key: "salary_offer", name: "Salary"},
-    {key: "street_add", name: "Road no/Area", width: 250},
+    {key: "salaryOffer", name: "Salary"},
+    {key: "street", name: "Road no/Area", width: 250},
     {key: "city", name: "City"},
     {key: "state", name: "State"},
     {key: "pincode", name: "Pincode"},
-    {key: "job_opening_date", name: "Opening Date"},
+    {key: "jobOpeningDate", name: "Opening Date"},
     {key: "description", name: "Description", width: 300},
     {key: "skills", name: "Skills"},
     {key: "apply", name: "Apply"}
@@ -52,7 +52,7 @@ class JobSeekerReport extends React.Component {
                         }
                     };
                     const job_id = {
-                        "job_id": row.jobId
+                        "jobId": row.jobId
                     }
                     ApiService.getJobDetailOfCompany(job_id, config).then(response => {
                         console.log("response==" + response);
@@ -102,6 +102,7 @@ class JobSeekerReport extends React.Component {
 
         ApiService.applyforjob(formData, config).then(response => {
             if (response.status == 200) {
+                alert("Apply Successfully");
             }
         }).catch(error => {
             if (error.response.status == 400) {
@@ -130,16 +131,16 @@ class JobSeekerReport extends React.Component {
                                 <label>Company :</label>
                                 <label>{this.state.jobdesc.company}</label>
                                 <label>Category :</label>
-                                <label>{this.state.jobdesc.category_name}</label>
+                                <label>{this.state.jobdesc.categoryName}</label>
                                 <label>Experience :</label>
                                 <label>{this.state.jobdesc.experience}</label>
                                 <label>Salary Offer :</label>
-                                <label>{this.state.jobdesc.salary_offer}</label>
+                                <label>{this.state.jobdesc.salaryOffer}</label>
                                 <label>Address :</label>
-                                <label>{this.state.jobdesc.street_add},{this.state.jobdesc.city},{this.state.jobdesc.state}</label>
+                                <label>{this.state.jobdesc.street},{this.state.jobdesc.city},{this.state.jobdesc.state}</label>
                                 <label>Description :</label>
                                 <label>{this.state.jobdesc.description}</label>
-                                <label>Job Opening Date :</label><label>{this.state.jobdesc.job_opening_date}</label>
+                                <label>Job Opening Date :</label><label>{this.state.jobdesc.jobOpeningDate}</label>
                                 <label>Resume :</label><input type="file" onChange={this.onChangeHandler}/>
                                 <input type="button" className="button" value="Apply" onClick={this.applyForJob}/>
 

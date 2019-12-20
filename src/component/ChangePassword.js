@@ -19,9 +19,9 @@ class ChangePassword extends Component {
             username: sessionStorage.getItem("username"),
             userType: sessionStorage.getItem("userType"),
             token: sessionStorage.getItem("token"),
-            old_password: "",
-            new_password: "",
-            confirm_password: ""
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: ""
 
         };
         this.handleChange = this.handleChange.bind(this);
@@ -33,9 +33,9 @@ class ChangePassword extends Component {
     changePassword(event) {
         event.preventDefault();
         const pwd_deatil = {
-            "old_password": this.state.old_password,
-            "new_password": this.state.new_password,
-            "confirm_password": this.state.confirm_password,
+            "oldPassword": this.state.oldPassword,
+            "newPassword": this.state.newPassword,
+            "confirmPassword": this.state.confirmPassword,
             "username": this.state.username
         }
         ApiService.updatePassoword(pwd_deatil, config)
@@ -72,15 +72,15 @@ class ChangePassword extends Component {
 
                     <form onSubmit={(event) => this.changePassword(event)}>
                         <label>Old Password :</label>
-                        <input type="password" name="old_password"
+                        <input type="password" name="oldPassword"
                                onChange={this.handleChange}/>
 
                         <label>New Password :</label>
-                        <input type="password" name="new_password"
+                        <input type="password" name="newPassword"
                                onChange={this.handleChange}/>
 
                         <label>Confirm Password :</label>
-                        <input type="password" name="confirm_password"
+                        <input type="password" name="confirmPassword"
                                onChange={this.handleChange}/>
 
                         <input type="submit" className="button" value="submit"/>

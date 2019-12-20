@@ -13,15 +13,15 @@ const config = {
 const columnsrecruiter = [
     {key: "jobId", name: "JOB ID", width: 0},
     {key: "company", name: "Company"},
-    {key: "category_name", name: "Category"},
-    {key: "job_type", name: "Type Of Job"},
+    {key: "categoryName", name: "Category"},
+    {key: "jobType", name: "Type Of Job"},
     {key: "experience", name: "Experience"},
-    {key: "salary_offer", name: "Salary"},
-    {key: "street_add", name: "Road no/Area"},
+    {key: "salaryOffer", name: "Salary"},
+    {key: "street", name: "Road no/Area"},
     {key: "city", name: "City"},
     {key: "state", name: "State"},
     {key: "pincode", name: "Pincode"},
-    {key: "job_opening_date", name: "Opening Date"},
+    {key: "jobOpeningDate", name: "Opening Date"},
     {key: "description", name: "Description"},
     {key: "skills", name: "Skills"},
     {key: "view", name: "View"},
@@ -29,8 +29,8 @@ const columnsrecruiter = [
 ]
 
 const columnsapplyjob = [
-    {key: "firstname", name: "First Name"},
-    {key: "lastname", name: "Last Name"},
+    {key: "firstName", name: "First Name"},
+    {key: "lastName", name: "Last Name"},
     {key: "company", name: "Company"},
     {key: "description", name: "Description"},
     {key: "applyDate", name: "Apply Date"},

@@ -20,10 +20,10 @@ class Profile extends Component {
             userID: sessionStorage.getItem("id"),
             userdetails: '',
             userType: sessionStorage.getItem("userType"),
-            firstname: "",
-            lastname: "",
-            mobno: "",
-            street_add: "",
+            firstName: "",
+            lastName: "",
+            mobileNo: "",
+            street: "",
             city: "",
             state: ""
         };
@@ -42,16 +42,16 @@ class Profile extends Component {
         }
         ApiService.loadProfileDetails(user_id, config).then(response => {
             this.setState({userdetails: response.data.body})
-            this.setState({firstname: response.data.body.firstname})
-            this.setState({lastname: response.data.body.lastname})
-            this.setState({mobno: response.data.body.mobno})
-            this.setState({street_add: response.data.body.street_add})
+            this.setState({firstName: response.data.body.firstname})
+            this.setState({lastName: response.data.body.lastname})
+            this.setState({mobileNo: response.data.body.mobno})
+            this.setState({street: response.data.body.street_add})
             this.setState({city: response.data.body.city})
             this.setState({state: response.data.body.state})
             this.setState({experience: response.data.body.experience})
-            this.setState({highest_degree: response.data.body.highest_degree})
-            this.setState({passing_year: response.data.body.passing_year})
-            this.setState({expected_salary: response.data.body.expected_salary})
+            this.setState({highestDegree: response.data.body.highestDegree})
+            this.setState({passingYear: response.data.body.passingYear})
+            this.setState({expectedSalary: response.data.body.expectedSalary})
         }).catch(error => {
             console.log(error);
         })
@@ -59,17 +59,17 @@ class Profile extends Component {
 
     saveProfileDetail() {
         const userdetail = {
-            "firstname": this.state.firstname,
-            "lastname": this.state.lastname,
-            "mobno": this.state.mobno,
-            "street_add": this.state.street_add,
+            "firstname": this.state.firstName,
+            "lastname": this.state.lastName,
+            "mobno": this.state.mobileNo,
+            "street_add": this.state.street,
             "city": this.state.city,
             "state": this.state.state,
             "experience": this.state.experience,
-            "highest_degree": this.state.highest_degree,
+            "highest_degree": this.state.highestDegree,
             "percentage": this.state.percentage,
-            "passing_year": this.state.passing_year,
-            "expected_salary": this.state.expected_salary,
+            "passing_year": this.state.passingYear,
+            "expected_salary": this.state.expectedSalary,
             "userID": sessionStorage.getItem("id")
         }
 
@@ -102,34 +102,34 @@ class Profile extends Component {
         let errors = {};
         let formIsValid = true;
 
-        if (!this.state.firstname) {
+        if (!this.state.firstName) {
             formIsValid = false;
-            errors["firstname"] = "*Please enter your First Name.";
+            errors["firstName"] = "*Please enter your First Name.";
         }
 
-        if (!this.state.firstname.match(/^[a-zA-Z ]*$/)) {
+        if (!this.state.firstName.match(/^[a-zA-Z ]*$/)) {
             formIsValid = false;
-            errors["firstname"] = "*Please enter alphabet characters only.";
+            errors["firstName"] = "*Please enter alphabet characters only.";
         }
 
-        if (!this.state.lastname) {
+        if (!this.state.lastName) {
             formIsValid = false;
-            errors["lastname"] = "*Please enter your Last Name.";
+            errors["lastName"] = "*Please enter your Last Name.";
         }
 
-        if (!this.state.lastname.match(/^[a-zA-Z ]*$/)) {
+        if (!this.state.lastName.match(/^[a-zA-Z ]*$/)) {
             formIsValid = false;
-            errors["lastname"] = "*Please enter alphabet characters only.";
+            errors["lastName"] = "*Please enter alphabet characters only.";
         }
 
-        if (!this.state.mobno) {
+        if (!this.state.mobileNo) {
             formIsValid = false;
-            errors["mobno"] = "*Please enter valid mobile no.";
+            errors["mobileNo"] = "*Please enter valid mobile no.";
         }
 
-        if (!this.state.mobno.match(/^[0-9]{10}$/)) {
+        if (!this.state.mobileNo.match(/^[0-9]{10}$/)) {
             formIsValid = false;
-            errors["mobno"] = "*Please enter valid mobile no.";
+            errors["mobileNo"] = "*Please enter valid mobile no.";
         }
 
         this.setState({
@@ -150,19 +150,19 @@ class Profile extends Component {
                         <div id="register">
                             <h3>My Profile</h3>
                             <label>First Name :</label>
-                            <input type="text" name="firstname" value={this.state.userdetails.firstname}
+                            <input type="text" name="firstName" value={this.state.userdetails.firstName}
                                    onChange={this.handleChange}/>
 
                             <label>Last Name :</label>
-                            <input type="text" name="lastname" value={this.state.userdetails.lastname}
+                            <input type="text" name="lastName" value={this.state.userdetails.lastName}
                                    onChange={this.handleChange}/>
 
                             <label>Mobile No :</label>
-                            <input type="text" name="mobno" value={this.state.userdetails.mobno}
+                            <input type="text" name="mobielNo" value={this.state.userdetails.mobileNo}
                                    onChange={this.handleChange}/>
 
                             <label>Street Address :</label>
-                            <input type="text" name="street_add" value={this.state.userdetails.street_add}
+                            <input type="text" name="street" value={this.state.userdetails.street}
                                    onChange={this.handleChange}/>
 
                             <label>City :</label>
@@ -189,19 +189,19 @@ class Profile extends Component {
                         <div id="register">
                             <h3>My Profile</h3>
                             <label>First Name :</label>
-                            <input type="text" name="firstname" value={this.state.userdetails.firstname}
+                            <input type="text" name="firstName" value={this.state.userdetails.firstName}
                                    onChange={this.handleChange}/>
 
                             <label>Last Name :</label>
-                            <input type="text" name="lastname" value={this.state.userdetails.lastname}
+                            <input type="text" name="lastName" value={this.state.userdetails.lastName}
                                    onChange={this.handleChange}/>
 
                             <label>Mobile No :</label>
-                            <input type="text" name="mobno" value={this.state.userdetails.mobno}
+                            <input type="text" name="mobileNo" value={this.state.userdetails.mobileNo}
                                    onChange={this.handleChange}/>
 
                             <label>Street Address :</label>
-                            <input type="text" name="street_add" value={this.state.userdetails.street_add}
+                            <input type="text" name="street" value={this.state.userdetails.street}
                                    onChange={this.handleChange}/>
 
                             <label>City :</label>
@@ -217,7 +217,7 @@ class Profile extends Component {
                                    onChange={this.handleChange}/>
 
                             <label>Highest Degree :</label>
-                            <input type="text" name="highest_degree" value={this.state.userdetails.highest_degree}
+                            <input type="text" name="highestDegree" value={this.state.userdetails.highestDegree}
                                    onChange={this.handleChange}/>
 
                             <label>Percentage :</label>
@@ -225,11 +225,11 @@ class Profile extends Component {
                                    onChange={this.handleChange}/>
 
                             <label>Passing Year :</label>
-                            <input type="text" name="passing_year" value={this.state.userdetails.passing_year}
+                            <input type="text" name="passingYear" value={this.state.userdetails.passingYear}
                                    onChange={this.handleChange}/>
 
                             <label>Expected Salary :</label>
-                            <input type="text" name="expected_salary" value={this.state.userdetails.expected_salary}
+                            <input type="text" name="expectedSalary" value={this.state.userdetails.expectedSalary}
                                    onChange={this.handleChange}/>
 
                             {/*<label>Skills :</label>*/}
