@@ -11,11 +11,9 @@ class Home extends Component {
         this.state = {
             userType: sessionStorage.getItem("userType"),
         }
-
     }
 
     render() {
-
         if (this.state.userType == 'R') {
             return (
                 <div>
@@ -39,7 +37,6 @@ class Home extends Component {
                 </div>
             );
         }
-
     }
 }
 

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from "axios";
 import RecruiterHeader from "./recruiter/RecruiterHeader";
 import JobSeekerHeader from "./jobseeker/JobSeekerHeader";
 import ApiService from "./service/ApiService";
@@ -42,10 +41,10 @@ class Profile extends Component {
         }
         ApiService.loadProfileDetails(user_id, config).then(response => {
             this.setState({userdetails: response.data.body})
-            this.setState({firstName: response.data.body.firstname})
-            this.setState({lastName: response.data.body.lastname})
-            this.setState({mobileNo: response.data.body.mobno})
-            this.setState({street: response.data.body.street_add})
+            this.setState({firstName: response.data.body.firstName})
+            this.setState({lastName: response.data.body.lastName})
+            this.setState({mobileNo: response.data.body.mobileNo})
+            this.setState({street: response.data.body.street})
             this.setState({city: response.data.body.city})
             this.setState({state: response.data.body.state})
             this.setState({experience: response.data.body.experience})
@@ -59,17 +58,17 @@ class Profile extends Component {
 
     saveProfileDetail() {
         const userdetail = {
-            "firstname": this.state.firstName,
-            "lastname": this.state.lastName,
-            "mobno": this.state.mobileNo,
-            "street_add": this.state.street,
+            "firstName": this.state.firstName,
+            "lastName": this.state.lastName,
+            "mobileNo": this.state.mobileNo,
+            "street": this.state.street,
             "city": this.state.city,
             "state": this.state.state,
             "experience": this.state.experience,
-            "highest_degree": this.state.highestDegree,
+            "highestDegree": this.state.highestDegree,
             "percentage": this.state.percentage,
-            "passing_year": this.state.passingYear,
-            "expected_salary": this.state.expectedSalary,
+            "passingYear": this.state.passingYear,
+            "expectedSalary": this.state.expectedSalary,
             "userID": sessionStorage.getItem("id")
         }
 

@@ -71,10 +71,10 @@ class Login extends Component {
                         sessionStorage.setItem('userType', response.data.body.userType);
                         this.setState({isLoggedIn: true});
 
-                        if (userdata.usertype == 'R') {
+                        if (userdata.userType == 'R') {
                             this.props.history.push('/jobportal/recruiter')
                             window.location.reload();
-                        } else if (userdata.usertype == 'J') {
+                        } else if (userdata.userType == 'J') {
                             this.props.history.push('/jobportal/jobseeker')
                             window.location.reload();
                         }
@@ -96,11 +96,9 @@ class Login extends Component {
         }
     }
 
-
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
-
 
     render() {
         return (
@@ -109,7 +107,6 @@ class Login extends Component {
                 <div id="login">
                     <h4>Login</h4>
                     <form onSubmit={(event) => this.login(event)}>
-
                         <label>Username</label>
                         <input type="text" name="username" onChange={this.onChange}/>
                         <span style={{color: "red"}}>{this.state.errors["username"]}</span>
@@ -118,7 +115,7 @@ class Login extends Component {
                         <input type="password" name="password" onChange={this.onChange}/>
                         <span style={{color: "red"}}>{this.state.errors["password"]}</span>
 
-                        <input type="submit" value="Login"/>
+                        <input type="submit" className="button" value="Login"/>
                     </form>
                     <Link activeStyle={{color: 'green'}} to={"/jobportal/signup"}>Registrartion</Link>
                 </div>

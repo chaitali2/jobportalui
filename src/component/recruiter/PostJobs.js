@@ -3,6 +3,7 @@ import RecruiterHeader from "./RecruiterHeader";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ApiService from "../service/ApiService";
+import {Redirect} from "react-router";
 
 const config = {
     headers: {
@@ -15,9 +16,9 @@ class PostJobs extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoggedIn:false,
             categories: [],
             skillvalue: [],
-
             categoryId: 0,
             company: '',
             skills: [],
@@ -30,12 +31,10 @@ class PostJobs extends React.Component {
             pincode: 0,
             description: '',
             jobOpeningDate: new Date(),
-
             postedById: sessionStorage.getItem("id"),
             value: "select",
             out: "",
             errors: {}
-
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -47,20 +46,22 @@ class PostJobs extends React.Component {
 
     componentWillMount() {
 
+        if (sessionStorage.getItem("token")==null) {
+            this.setState({isLoggedIn: true});
+        }else {
+            ApiService.getcategories(config)
+                .then(response => {
+                    console.log(response);
+                    if (response.data.statusCodeValue == 200) {
+                        this.setState({categories: response.data.body})
+                    }
 
-        ApiService.getcategories(config)
-            .then(response => {
-                console.log(response);
-                if (response.data.statusCodeValue == 200) {
-                    this.setState({categories: response.data.body})
-                }
+                }).catch(error => {
+                console.log(error);
+                this.props.history.push('/login')
+            })
 
-            }).catch(error => {
-            console.log(error);
-            this.props.history.push('/login')
-        })
-
-
+        }
     }
 
     validateForm() {
@@ -71,7 +72,6 @@ class PostJobs extends React.Component {
             formIsValid = false;
             errors["category"] = "*Please select category";
         }
-
 
         if (!this.state.company) {
             formIsValid = false;
@@ -127,7 +127,6 @@ class PostJobs extends React.Component {
             formIsValid = false;
             errors["jobOpeningDate"] = "*Please select job opening date";
         }
-
 
         this.setState({
             errors: errors
@@ -219,6 +218,9 @@ class PostJobs extends React.Component {
     }
 
     render() {
+        if (this.state.isLoggedIn) {
+            return (<Redirect to={'/jobportal/login'}/>);
+        }
         return (
             <div>
                 <RecruiterHeader/>
@@ -240,8 +242,8 @@ class PostJobs extends React.Component {
 
                         <label>Skills :</label>
                         <select name="skills" multiple={true} onChange={this.handleChangeMultiSelect}>
-                            {this.state.skillvalue.map(o => <option key={o.skill_id}
-                                                                    value={o.skill_id}>{o.skill_name}</option>)}
+                            {this.state.skillvalue.map(o => <option key={o.skillId}
+                                                                    value={o.skillId}>{o.skillName}</option>)}
                         </select>
                         <span style={{color: "red"}}>{this.state.errors["skills"]}</span>
 

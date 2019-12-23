@@ -46,6 +46,16 @@ select{
     margin-right: 50px;
 }
 
+.buttonview{
+    background-color: lightseagreen;
+    border-color: #3ac162;
+    font-weight: bold;
+    padding: 6px 15px;
+    color: #ffffff;
+    margin-right: 50px;
+    width: 250px;
+}
+
 .errorMsg {
     color: #cc0000;
     margin-bottom: 12px;

@@ -3,7 +3,6 @@ import ReactDataGrid from "react-data-grid";
 import JobSeekerHeader from "./JobSeekerHeader";
 import ApiService from "../service/ApiService";
 
-
 const columnsjobseeker = [
     {key: "jobId", name: "JOB ID", width: 0},
     {key: "company", name: "Company", width: 150},
@@ -20,7 +19,6 @@ const columnsjobseeker = [
     {key: "skills", name: "Skills"},
     {key: "apply", name: "Apply"}
 ]
-
 
 class JobSeekerReport extends React.Component {
     constructor(props) {
@@ -99,23 +97,26 @@ class JobSeekerReport extends React.Component {
                 'username': sessionStorage.getItem('username')
             }
         };
-
-        ApiService.applyforjob(formData, config).then(response => {
-            if (response.status == 200) {
-                alert("Apply Successfully");
-            }
-        }).catch(error => {
-            if (error.response.status == 400) {
-                if (error.response.data.errorMessage) {
-                    alert(error.response.data.errorMessage);
-                } else {
-                    alert(error.response.data);
+        if (!this.state.file) {
+            alert("Please Upload Resume");
+        } else {
+            ApiService.applyforjob(formData, config).then(response => {
+                if (response.status == 200) {
+                    alert("Apply Successfully");
                 }
-            }
-            if (error.response.status == 500) {
-                alert(error.response.data.errorMessage);
-            }
-        })
+            }).catch(error => {
+                if (error.response.status == 400) {
+                    if (error.response.data.errorMessage) {
+                        alert(error.response.data.errorMessage);
+                    } else {
+                        alert(error.response.data);
+                    }
+                }
+                if (error.response.status == 500) {
+                    alert(error.response.data.errorMessage);
+                }
+            })
+        }
     }
 
     render() {
@@ -163,7 +164,6 @@ class JobSeekerReport extends React.Component {
             </div>
         )
     }
-
 }
 
 export default JobSeekerReport

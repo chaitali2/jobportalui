@@ -34,7 +34,6 @@ class JobSeekerHeader extends React.Component {
         }
         return (
             <div>
-
                 <div className="header">
                     <label className="label label-primary"><Link to={"/jobportal/home"}>JOB Portal</Link></label>
                     <label className="label label-primary"> <Link to={"/jobportal/report"}>Job List</Link></label>

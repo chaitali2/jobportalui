@@ -9,11 +9,8 @@ class RecruiterHeader extends React.Component {
             isLoggedIn: false,
             username: sessionStorage.getItem("username"),
             fullname: sessionStorage.getItem("fullname")
-
         };
-
         this.logout = this.logout.bind(this);
-
     }
 
     componentWillMount() {
@@ -27,11 +24,6 @@ class RecruiterHeader extends React.Component {
         sessionStorage.setItem("token", "");
         sessionStorage.clear();
         this.setState({isLoggedIn: true});
-        // this.props.history.push('/jobportal/login');
-    }
-
-    refresh() {
-        window.location.reload();
     }
 
     render() {

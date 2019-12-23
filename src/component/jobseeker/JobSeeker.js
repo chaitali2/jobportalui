@@ -9,7 +9,6 @@ class JobSeeker extends React.Component {
             </div>
         );
     }
-
 }
 
 export default JobSeeker

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const USER_API_BASE_URL = 'http://10.234.4.106:8090/api/jobportal/';
+const USER_API_BASE_URL = 'http://192.168.1.14:8080/api/jobportal/';
 
 class ApiService {
 

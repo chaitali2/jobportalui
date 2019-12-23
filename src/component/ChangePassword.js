@@ -12,7 +12,6 @@ const config = {
 };
 
 class ChangePassword extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -26,8 +25,6 @@ class ChangePassword extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.changePassword = this.changePassword.bind(this);
-
-
     }
 
     changePassword(event) {

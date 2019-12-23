@@ -57,7 +57,7 @@ class RecruiterJobReport extends React.Component {
     getCellActionOnResume(column, row) {
         const cellActions = {
             fileName: [{
-                icon: <input type="button" className="button" value="View"/>,
+                    icon: <input type="button" className="buttonview" value="Download"/>,
                 callback: () => {
                     const filename = {
                         "filename": row.fileName
@@ -120,6 +120,8 @@ class RecruiterJobReport extends React.Component {
                     }
                     ApiService.deleteJobPost(job_id, config)
                         .then(response => {
+                            alert("Record deleted successfully");
+                            window.location.reload();
                         }).catch(error => {
                         if (error.response.status == 400) {
                             alert(error.response.data.errorMessage);

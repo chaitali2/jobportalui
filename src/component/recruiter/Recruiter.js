@@ -9,7 +9,6 @@ class Recruiter extends React.Component {
             </div>
         );
     }
-
 }
 
 export default Recruiter

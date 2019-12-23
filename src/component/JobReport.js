@@ -4,6 +4,7 @@ import ApiService from "./service/ApiService";
 import RecruiterJobReport from "./recruiter/RecruiterJobReport";
 import JobSeekerReport from "./jobseeker/JobSeekerReport";
 import JobSeekerHeader from "./jobseeker/JobSeekerHeader";
+import {Redirect} from "react-router";
 
 const config = {
     headers: {
@@ -25,25 +26,29 @@ class JobReport extends React.Component {
             job_id: '',
             file: null,
             jobstatus: false,
-            isView: false
+            isView: false,
+            isLoggedIn: false
         }
     };
 
-
     componentWillMount() {
-        let jobListURL = "";
-        if (this.state.userType == 'R') {
-            const user_id = {
-                "userId": this.state.user_id
+        if (sessionStorage.getItem("token")==null) {
+            this.setState({isLoggedIn: true});
+        }else {
+            let jobListURL = "";
+            if (this.state.userType == 'R') {
+                const user_id = {
+                    "userId": this.state.user_id
+                }
+                this.loadJobdetail(user_id);
+            } else {
+                this.loadJobdetail();
             }
-            this.loadJobdetail(user_id);
-        } else {
-            this.loadJobdetail();
         }
-
     }
 
     componentDidMount() {
+
         this.setState({isView: false})
     }
 
@@ -67,8 +72,10 @@ class JobReport extends React.Component {
         })
     }
 
-
     render() {
+        if (this.state.isLoggedIn) {
+            return (<Redirect to={'/jobportal/login'}/>);
+        }
         if (this.state.userType == 'R') {
             if (this.state.rowslength == 0) {
                 return (
@@ -87,7 +94,6 @@ class JobReport extends React.Component {
                 );
             }
         } else if (this.state.userType == 'J') {
-
             if (this.state.rowslength == 0) {
                 return (
                     <div>
@@ -96,7 +102,6 @@ class JobReport extends React.Component {
                             <h3>No Record Found !!</h3>
                         </div>
                     </div>
-
                 );
             } else {
                 return (
@@ -107,8 +112,6 @@ class JobReport extends React.Component {
             }
         }
     }
-
 }
-
 
 export default JobReport
