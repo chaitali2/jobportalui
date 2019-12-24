@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import RecruiterHeader from "./recruiter/RecruiterHeader";
 import JobSeekerHeader from "./jobseeker/JobSeekerHeader";
 import ApiService from "./service/ApiService";
+import {Redirect} from "react-router";
+import cookie from 'react-cookies'
 
 const config = {
     headers: {
@@ -24,7 +26,8 @@ class Profile extends Component {
             mobileNo: "",
             street: "",
             city: "",
-            state: ""
+            state: "",
+            isLoggedIn: true
         };
         this.handleChange = this.handleChange.bind(this);
         this.saveProfileDetail = this.saveProfileDetail.bind(this);
@@ -40,6 +43,7 @@ class Profile extends Component {
             "user_id": this.state.userID
         }
         ApiService.loadProfileDetails(user_id, config).then(response => {
+            console.log(response.headers);
             this.setState({userdetails: response.data.body})
             this.setState({firstName: response.data.body.firstName})
             this.setState({lastName: response.data.body.lastName})
@@ -52,6 +56,11 @@ class Profile extends Component {
             this.setState({passingYear: response.data.body.passingYear})
             this.setState({expectedSalary: response.data.body.expectedSalary})
         }).catch(error => {
+            if (error == "Error: Network Error") {
+                this.setState({isLoggedIn: false});
+                sessionStorage.setItem("token", "");
+                sessionStorage.clear();
+            }
             console.log(error);
         })
     }
@@ -140,6 +149,10 @@ class Profile extends Component {
     }
 
     render() {
+
+        if (!this.state.isLoggedIn) {
+            return (<Redirect to={'/jobportal/login'}/>);
+        }
         if (this.state.userType == 'R') {
             return (
                 <div>

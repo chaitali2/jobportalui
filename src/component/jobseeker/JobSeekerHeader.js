@@ -7,7 +7,7 @@ class JobSeekerHeader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: false,
+            isLoggedIn: true,
             username: sessionStorage.getItem("username"),
             fullname: sessionStorage.getItem("fullname")
         };
@@ -17,19 +17,19 @@ class JobSeekerHeader extends React.Component {
     componentWillMount() {
         if (sessionStorage.getItem("token")) {
         } else {
-            this.setState({isLoggedIn: true});
+            this.setState({isLoggedIn: false});
         }
     }
 
     logout() {
         sessionStorage.setItem("token", "");
         sessionStorage.clear();
-        this.setState({isLoggedIn: true});
+        this.setState({isLoggedIn: false});
 
     }
 
     render() {
-        if (this.state.isLoggedIn) {
+        if (!this.state.isLoggedIn) {
             return (<Redirect to={'/jobportal/login'}/>);
         }
         return (

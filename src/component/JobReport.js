@@ -27,13 +27,13 @@ class JobReport extends React.Component {
             file: null,
             jobstatus: false,
             isView: false,
-            isLoggedIn: false
+            isLoggedIn: true
         }
     };
 
     componentWillMount() {
         if (sessionStorage.getItem("token")==null) {
-            this.setState({isLoggedIn: true});
+            this.setState({isLoggedIn: false});
         }else {
             let jobListURL = "";
             if (this.state.userType == 'R') {
@@ -73,7 +73,7 @@ class JobReport extends React.Component {
     }
 
     render() {
-        if (this.state.isLoggedIn) {
+        if (!this.state.isLoggedIn) {
             return (<Redirect to={'/jobportal/login'}/>);
         }
         if (this.state.userType == 'R') {

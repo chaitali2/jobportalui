@@ -16,7 +16,7 @@ class PostJobs extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn:false,
+            isLoggedIn:true,
             categories: [],
             skillvalue: [],
             categoryId: 0,
@@ -47,7 +47,7 @@ class PostJobs extends React.Component {
     componentWillMount() {
 
         if (sessionStorage.getItem("token")==null) {
-            this.setState({isLoggedIn: true});
+            this.setState({isLoggedIn: false});
         }else {
             ApiService.getcategories(config)
                 .then(response => {
@@ -218,7 +218,7 @@ class PostJobs extends React.Component {
     }
 
     render() {
-        if (this.state.isLoggedIn) {
+        if (!this.state.isLoggedIn) {
             return (<Redirect to={'/jobportal/login'}/>);
         }
         return (
